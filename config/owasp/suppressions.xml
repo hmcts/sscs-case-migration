@@ -15,4 +15,94 @@
     <cve>CVE-2020-10663</cve>
     <cve>CVE-2020-7712</cve>
    </suppress>
+  <suppress>
+    <notes><![CDATA[
+   Apache XML Graphics is used by Batik
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.xmlgraphics/batik*.*$</packageUrl>
+    <cpe>cpe:/a:apache:batik</cpe>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: batik-dom-1.13.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.xmlgraphics/batik\-dom@.*$</packageUrl>
+    <cpe>cpe:/a:apache:batik</cpe>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: batik-dom-1.13.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.xmlgraphics/batik\-dom@.*$</packageUrl>
+    <vulnerabilityName>CVE-2020-11987</vulnerabilityName>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: batik-transcoder-1.13.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.xmlgraphics/batik\-transcoder@.*$</packageUrl>
+    <vulnerabilityName>CVE-2020-11987</vulnerabilityName>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: commons-beanutils-1.9.3.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/commons\-beanutils/commons\-beanutils@.*$</packageUrl>
+    <cve>CVE-2019-10086</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: commons-compress-1.20.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.commons/commons\-compress@.*$</packageUrl>
+    <cpe>cpe:/a:apache:commons_compress</cpe>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: commons-compress-1.20.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.commons/commons\-compress@.*$</packageUrl>
+    <vulnerabilityName>CVE-2021-35515</vulnerabilityName>
+    <vulnerabilityName>CVE-2021-35516</vulnerabilityName>
+    <vulnerabilityName>CVE-2021-35517</vulnerabilityName>
+    <vulnerabilityName>CVE-2021-36090</vulnerabilityName>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: pdfbox-2.0.22.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/pdfbox@.*$</packageUrl>
+    <cpe>cpe:/a:apache:pdfbox</cpe>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: pdfbox-2.0.22.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/pdfbox@.*$</packageUrl>
+    <vulnerabilityName>CVE-2021-27807</vulnerabilityName>
+    <vulnerabilityName>CVE-2021-27906</vulnerabilityName>
+    <vulnerabilityName>CVE-2021-31811</vulnerabilityName>
+    <vulnerabilityName>CVE-2021-31812</vulnerabilityName>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: xmlgraphics-commons-2.4.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.xmlgraphics/xmlgraphics\-commons@.*$</packageUrl>
+    <cpe>cpe:/a:apache:xmlgraphics_commons</cpe>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: xmlgraphics-commons-2.4.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.xmlgraphics/xmlgraphics\-commons@.*$</packageUrl>
+    <vulnerabilityName>CVE-2020-11988</vulnerabilityName>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: xmlsec-2.2.1.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.santuario/xmlsec@.*$</packageUrl>
+    <cve>CVE-2021-40690</cve>
+  </suppress>
 </suppressions>

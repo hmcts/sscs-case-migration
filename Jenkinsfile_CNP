@@ -1,0 +1,25 @@
+#!groovy
+properties([
+        [$class: 'GithubProjectProperty', projectUrlStr: 'https://github.com/hmcts/sscs-case-migration'],
+        pipelineTriggers([[$class: 'GitHubPushTrigger']])
+])
+
+@Library("Infrastructure")
+
+import uk.gov.hmcts.contino.GradleBuilder
+
+def type = "java"
+def product = "sscs"
+def component = "case-migration"
+
+def gradleBuilder = new GradleBuilder(this, product)
+
+def branchesToSync = ['demo']
+
+withPipeline(type, product, component) {
+    enableSlackNotifications('#sscs-tech')
+    enableAksStagingDeployment()
+    disableLegacyDeployment()
+    syncBranchesWithMaster(branchesToSync)
+}
+
