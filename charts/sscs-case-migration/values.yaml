@@ -1,6 +1,7 @@
 java:
   image: 'hmctspublic.azurecr.io/sscs/case-migration:latest'
   aadIdentityName: sscs
+  ingressHost: ""
   keyVaults:
     sscs:
       resourceGroup: sscs
