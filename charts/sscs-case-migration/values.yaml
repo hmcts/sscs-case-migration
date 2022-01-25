@@ -1,5 +1,5 @@
 java:
-  image: 'hmctspublic.azurecr.io/rpe/sscs-case-migration:latest'
+  image: 'hmctspublic.azurecr.io/sscs/case-migration:latest'
   aadIdentityName: sscs
   keyVaults:
     sscs:
