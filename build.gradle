@@ -112,8 +112,8 @@ project.tasks['sonarqube'].dependsOn jacocoTestReport
 
 sonarqube {
   properties {
-    property "sonar.projectName", "Reform :: spring-boot-template"
-    property "sonar.projectKey", "uk.gov.hmcts.reform:spring-boot-template"
+    property "sonar.projectName", "Reform :: sscs-case-migration"
+    property "sonar.projectKey", "uk.gov.hmcts.reform:sscs-case-migration"
     property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.destination.path}"
   }
 }
@@ -186,7 +186,7 @@ dependencies {
 mainClassName = 'uk.gov.hmcts.reform.demo.Application'
 
 bootJar {
-  archiveFileName = "spring-boot-template.jar"
+  archiveFileName = "sscs-case-migration.jar"
 
   manifest {
     attributes('Implementation-Version': project.version.toString())

@@ -1,6 +1,6 @@
 # Spring Boot application template
 
-[![Build Status](https://travis-ci.org/hmcts/spring-boot-template.svg?branch=master)](https://travis-ci.org/hmcts/spring-boot-template)
+[![Build Status](https://travis-ci.org/hmcts/sscs-case-migration.svg?branch=master)](https://travis-ci.org/hmcts/sscs-case-migration)
 
 ## Purpose
 
@@ -125,7 +125,7 @@ Create docker image:
   docker-compose build
 ```
 
-Run the distribution (created in `build/install/spring-boot-template` directory)
+Run the distribution (created in `build/install/sscs-case-migration` directory)
 by executing the following command:
 
 ```bash

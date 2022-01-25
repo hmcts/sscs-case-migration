@@ -3,7 +3,7 @@
 # Script to initialise project by executing steps as follows:
 #   - Replace port number
 #   - Replace package `demo`
-#   - Replace slug from `spring-boot-template` to one of two (first in first used):
+#   - Replace slug from `sscs-case-migration` to one of two (first in first used):
 #      - user input
 #      - git config value of the root project. Value in use: `remote.origin.url`
 #   - Clean-up README file from template related info
@@ -18,8 +18,8 @@ pushd $(dirname "$0")/.. > /dev/null
 
 slug="$product_name-$component_name"
 
-declare -a files_with_port=(.env Dockerfile README.md src/main/resources/application.yaml charts/rpe-spring-boot-template/values.yaml)
-declare -a files_with_slug=(build.gradle docker-compose.yml Dockerfile README.md ./infrastructure/main.tf ./src/main/java/uk/gov/hmcts/reform/demo/controllers/RootController.java charts/rpe-spring-boot-template/Chart.yaml)
+declare -a files_with_port=(.env Dockerfile README.md src/main/resources/application.yaml charts/sscs-case-migration/values.yaml)
+declare -a files_with_slug=(build.gradle docker-compose.yml Dockerfile README.md ./infrastructure/main.tf ./src/main/java/uk/gov/hmcts/reform/demo/controllers/RootController.java charts/sscs-case-migration/Chart.yaml)
 
 # Replace in CNP file
 for i in "Jenkinsfile_template"
@@ -29,14 +29,14 @@ do
 done
 
 # Replace image repo
-for i in "charts/rpe-spring-boot-template/values.yaml"
+for i in "charts/sscs-case-migration/values.yaml"
 do
   perl -i -pe "s/rpe/$product_name/g" ${i}
-  perl -i -pe "s/spring-boot-template/$component_name/g" ${i}
+  perl -i -pe "s/sscs-case-migration/$component_name/g" ${i}
 done
 
 #update maintainer name
-for i in "charts/rpe-spring-boot-template/Chart.yaml"
+for i in "charts/sscs-case-migration/Chart.yaml"
 do
   perl -i -pe "s/rpe/$product_name/g" ${i}
 done
@@ -53,10 +53,10 @@ do
   perl -i -pe "s/4550/$port/g" ${i}
 done
 
-# Replace spring-boot-template slug
+# Replace sscs-case-migration slug
 for i in ${files_with_slug[@]}
 do
-  perl -i -pe "s/spring-boot-template/$slug/g" ${i}
+  perl -i -pe "s/sscs-case-migration/$slug/g" ${i}
 done
 
 # Replace demo package in all files under ./src
@@ -64,7 +64,7 @@ find ./src -type f -print0 | xargs -0 perl -i -pe "s/reform.demo/reform.$package
 perl -i -pe "s/reform.demo/reform.$package/g" build.gradle
 
 # Rename charts directory
-git mv charts/rpe-spring-boot-template charts/${slug}
+git mv charts/sscs-case-migration charts/${slug}
 
 # Rename directory to provided package name
 git mv src/integrationTest/java/uk/gov/hmcts/reform/demo/ src/integrationTest/java/uk/gov/hmcts/reform/${package}
