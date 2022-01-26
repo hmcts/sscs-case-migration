@@ -2,7 +2,13 @@ package uk.gov.hmcts.reform.sscs.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
@@ -13,6 +19,7 @@ import uk.gov.hmcts.reform.sscs.migration.DataMigrationStep;
 
 
 @Service("dataMigrationService")
+@Slf4j
 public class SscsDataMigrationService implements DataMigrationService<SscsCaseData> {
     private static final String JURISDICTION_SSCS = "SSCS";
 
@@ -40,6 +47,15 @@ public class SscsDataMigrationService implements DataMigrationService<SscsCaseDa
         if (dataMigrationSteps != null && !dataMigrationSteps.isEmpty()) {
             dataMigrationSteps.forEach(s -> s.apply(sscsCaseData));
         }
+
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                log.info("Waiting to shutdown......");
+            }
+        }, 7, TimeUnit.MINUTES);
+        executorService.shutdown();
 
         return sscsCaseData;
     }

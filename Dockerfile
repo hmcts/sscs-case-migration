@@ -8,3 +8,4 @@ COPY lib/AI-Agent.xml /opt/app/
 COPY build/libs/sscs-case-migration.jar /opt/app/
 
 CMD [ "sscs-case-migration.jar" ]
+EXPOSE 8088
