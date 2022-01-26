@@ -89,23 +89,11 @@ public class SscsDataMigrationServiceIt {
     private SscsCcdConvertService sscsCcdConvertService;
 
     @Autowired
-    private CaseAccessManagementDataMigration caseAccessManagementDataMigration;
-
-    @Autowired
     private SscsDataMigrationService sscsDataMigrationService;
 
-    @MockBean
-    private LocationDataMigration locationDataMigration;
 
     @Test
     public void verifyServiceCall() {
-        assertNotNull(sscsCaseData.getWorkAllocationFields());
-        assertEquals(Benefit.PIP.getDescription(), sscsCaseData.getWorkAllocationFields().getCaseAccessCategory());
-        assertEquals(Benefit.PIP.getShortName(), sscsCaseData.getWorkAllocationFields().getCaseManagementCategory().getListItems().get(0).getCode());
-        assertEquals(Benefit.PIP.getDescription(), sscsCaseData.getWorkAllocationFields().getCaseManagementCategory().getListItems().get(0).getLabel());
-        assertEquals("First Last", sscsCaseData.getWorkAllocationFields().getCaseNameHmctsInternal());
-        assertEquals("First Last", sscsCaseData.getWorkAllocationFields().getCaseNameHmctsRestricted());
-        assertEquals("First Last", sscsCaseData.getWorkAllocationFields().getCaseNamePublic());
-        assertEquals("DWP", sscsCaseData.getWorkAllocationFields().getOgdType());
+        assertNotNull(sscsCaseData);
     }
 }
