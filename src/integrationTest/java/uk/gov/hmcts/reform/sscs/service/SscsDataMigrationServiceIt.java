@@ -1,10 +1,10 @@
 package uk.gov.hmcts.reform.sscs.service;
 
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
@@ -31,7 +31,7 @@ public class SscsDataMigrationServiceIt {
 
     private static CaseDetails caseDetails;
     private static Map<String, Object> caseData = new HashMap<>();
-    private static SscsCaseData sscsCaseData;
+    protected static SscsCaseData sscsCaseData;
 
     @TestConfiguration
     public static class TestConfig {
@@ -90,6 +90,6 @@ public class SscsDataMigrationServiceIt {
 
     @Test
     public void verifyServiceCall() {
-        assertNotNull(sscsCaseData);
+        Assertions.assertNotNull(sscsCaseData);
     }
 }
