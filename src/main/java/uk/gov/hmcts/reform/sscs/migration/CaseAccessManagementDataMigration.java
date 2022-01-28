@@ -15,7 +15,7 @@ public class CaseAccessManagementDataMigration implements DataMigrationStep {
     public void apply(SscsCaseData sscsCaseData) {
         addCaseCategories(sscsCaseData);
         addCaseNames(sscsCaseData);
-        addOgdType(sscsCaseData);
+        setOgdTypeToDwp(sscsCaseData);
     }
 
     private void addCaseCategories(SscsCaseData sscsCaseData) {
@@ -31,7 +31,7 @@ public class CaseAccessManagementDataMigration implements DataMigrationStep {
         sscsCaseData.getWorkAllocationFields().setCaseNames(caseName);
     }
 
-    private void addOgdType(SscsCaseData sscsCaseData) {
+    private void setOgdTypeToDwp(SscsCaseData sscsCaseData) {
         sscsCaseData.getWorkAllocationFields().setOgdType("DWP");
     }
 }
