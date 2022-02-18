@@ -17,7 +17,7 @@ public class CaseAccessManagementDataMigrationIt extends SscsDataMigrationServic
     @Test
     public void verifyServiceCall() {
         Assertions.assertNotNull(sscsCaseData.getWorkAllocationFields());
-        Assertions.assertEquals(Benefit.PIP.getDescription(), sscsCaseData.getWorkAllocationFields().getCaseAccessCategory());
+        Assertions.assertEquals("personalIndependencePayment", sscsCaseData.getWorkAllocationFields().getCaseAccessCategory());
         Assertions.assertEquals(Benefit.PIP.getShortName(), sscsCaseData.getWorkAllocationFields().getCaseManagementCategory().getListItems().get(0).getCode());
         Assertions.assertEquals(Benefit.PIP.getDescription(), sscsCaseData.getWorkAllocationFields().getCaseManagementCategory().getListItems().get(0).getLabel());
         Assertions.assertEquals("First Last", sscsCaseData.getWorkAllocationFields().getCaseNameHmctsInternal());

@@ -53,7 +53,7 @@ public class CaseAccessManagementDataMigrationTest {
         caseAccessManagementDataMigration.apply(caseData);
 
         assertNotNull(caseData.getWorkAllocationFields());
-        assertEquals(Benefit.PIP.getDescription(), caseData.getWorkAllocationFields().getCaseAccessCategory());
+        assertEquals("personalIndependencePayment", caseData.getWorkAllocationFields().getCaseAccessCategory());
         assertEquals(Benefit.PIP.getShortName(), caseData.getWorkAllocationFields().getCaseManagementCategory().getListItems().get(0).getCode());
         assertEquals(Benefit.PIP.getDescription(), caseData.getWorkAllocationFields().getCaseManagementCategory().getListItems().get(0).getLabel());
     }

@@ -154,7 +154,7 @@ dependencies {
 
   implementation 'com.github.hmcts.ccd-case-migration-starter:domain:3.0.0'
   implementation 'com.github.hmcts.ccd-case-migration-starter:processor:3.0.0'
-  implementation 'com.github.hmcts:sscs-common:4.6.33-RC-SSCS-9902'
+  implementation 'com.github.hmcts:sscs-common:4.6.38'
 
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
   compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
