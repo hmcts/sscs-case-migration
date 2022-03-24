@@ -7,7 +7,8 @@ import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Benefit;
 import uk.gov.hmcts.reform.sscs.service.SscsDataMigrationServiceIt;
 
-@TestPropertySource(properties = { "migration.case_access_management.enabled=true" })
+@TestPropertySource(properties = { "migration.case_access_management.enabled=true", "migration.startDate=2202-03-01",
+    "migration.endDate=2022-03-30", "migration.dryrun=false"})
 public class CaseAccessManagementDataMigrationIt extends SscsDataMigrationServiceIt {
 
     @Autowired
