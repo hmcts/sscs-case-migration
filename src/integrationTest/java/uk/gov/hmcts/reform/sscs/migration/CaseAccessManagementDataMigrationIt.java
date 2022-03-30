@@ -1,19 +1,19 @@
 package uk.gov.hmcts.reform.sscs.migration;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Benefit;
 import uk.gov.hmcts.reform.sscs.service.SscsDataMigrationServiceIt;
 
-@TestPropertySource(properties = { "migration.case_access_management.enabled=true", "migration.startDate=2202-03-01",
+@TestPropertySource(properties = { "migration.case_access_management.enabled=true", "migration.startDate=2022-03-01",
     "migration.endDate=2022-03-30", "migration.dryrun=false"})
 public class CaseAccessManagementDataMigrationIt extends SscsDataMigrationServiceIt {
 
     @Autowired
     private CaseAccessManagementDataMigration caseAccessManagementDataMigration;
-
 
     @Test
     public void verifyServiceCall() {

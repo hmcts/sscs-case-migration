@@ -2,6 +2,53 @@
 
 [![Build Status](https://travis-ci.org/hmcts/sscs-case-migration.svg?branch=master)](https://travis-ci.org/hmcts/sscs-case-migration)
 
+## Building the case migration tool
+
+## Get the base repo
+
+Clone this https://github.com/hmcts/ccd-case-migration-starter.git
+Pull this PR
+https://github.com/hmcts/ccd-case-migration-starter/pull/7
+
+In intellij
+Run build in the processor module which I have updated to use Elastic search
+Then run publishToMavenLocal to add it to your local maven
+
+## Get this repo
+
+Clone this https://github.com/hmcts/sscs-case-migration.git
+Then pull this https://github.com/hmcts/sscs-case-migration/pull/20
+
+Then run clean and build and you will get a jar file at build/libs/sscs-case-migration.jar
+
+I locally have application.properties files for demo, aat and perftest. I swap them out and build another jar file for each environment. The secrets for these are in Azure vault
+
+
+## Run case migration tool
+
+To run it you can do this to start, add a caseId that is on your local, this won’t actually update anything as it does a dryrun by default so you don’t run updates accidentally. This allow you to test you are connecting with Adam and CCD
+
+java -jar sscs-case-migration.jar --migration.caseId=1648028211163560
+
+This will actually perform an update of a case, this allows you to test updates are being done correctly on one case
+
+java -jar sscs-case-migration.jar --migration.caseId=1648028211163560 --migration.dryrun=false
+
+Use the start and enddate to control how many cases get updated
+
+Running with dry run won’t update anything but will return the date of the oldest case to tell you where to start and will tell you the number of cases on each date so you can control the updates. When we look at performance testing will enable us to estimate how to run 8 hours worth of updates.
+
+java -jar sscs-case-migration.jar --migration.startDate=2022-03-23 --migration.endDate=2022-03-25 --migration.dryrun=true
+
+Run and will update your local for the dates between the start and end, the one below would process the 23rd and the 24th
+
+java -jar sscs-case-migration.jar --migration.startDate=2022-03-23 --migration.endDate=2022-03-25 --migration.dryrun=false
+
+
+
+
+
+
 ## Purpose
 
 The purpose of this template is to speed up the creation of new Spring applications within HMCTS

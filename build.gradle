@@ -154,7 +154,8 @@ dependencies {
 
   implementation 'com.github.hmcts.ccd-case-migration-starter:domain:3.0.0'
   implementation 'uk.gov.hmcts.reform.ccd-case-migration:processor:DEV-SNAPSHOT'
-  implementation 'com.github.hmcts:sscs-common:4.6.45'
+  implementation 'com.github.hmcts:sscs-common:4.7.1-RC-2-SSCS-9911'
+  implementation 'com.github.hmcts:idam-java-client:2.0.1'
 
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
   compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
