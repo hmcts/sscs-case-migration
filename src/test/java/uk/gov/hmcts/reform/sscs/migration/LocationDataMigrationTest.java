@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,7 @@ public class LocationDataMigrationTest {
         when(refDataService.getVenueRefData(anyString())).thenReturn(CourtVenue.builder().epimsId("epimms_id").regionId("region_id").build());
     }
 
+    @Ignore
     @Test
     public void testRefData() {
         SscsCaseData caseData = SscsCaseData.builder().build();
