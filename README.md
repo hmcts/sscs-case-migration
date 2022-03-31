@@ -21,7 +21,7 @@ Then pull this https://github.com/hmcts/sscs-case-migration/pull/20
 
 Then run clean and build and you will get a jar file at build/libs/sscs-case-migration.jar
 
-I have locLLY have application.properties files for demo, aat and perftest. I swap them out and build another jar file for each environment. The secrets for these are in Azure vault
+I locally have application.properties files for demo, aat and perftest. I swap them out and build another jar file for each environment. The secrets for these are in Azure vault
 
 
 ## Run case migration tool
