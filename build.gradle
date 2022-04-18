@@ -156,7 +156,7 @@ dependencies {
   implementation 'com.github.hmcts.ccd-case-migration-starter:processor:3.0.0'
   implementation 'com.github.hmcts:sscs-common:4.6.45'
 
-  annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
+  annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
   compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
 
   implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
