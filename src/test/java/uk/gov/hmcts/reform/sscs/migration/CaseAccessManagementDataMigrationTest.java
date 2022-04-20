@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.sscs.migration;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
@@ -9,14 +11,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.hmcts.reform.sscs.ccd.domain.*;
+import uk.gov.hmcts.reform.sscs.ccd.domain.Appeal;
+import uk.gov.hmcts.reform.sscs.ccd.domain.Appellant;
+import uk.gov.hmcts.reform.sscs.ccd.domain.Benefit;
+import uk.gov.hmcts.reform.sscs.ccd.domain.BenefitType;
+import uk.gov.hmcts.reform.sscs.ccd.domain.Name;
+import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
+import uk.gov.hmcts.reform.sscs.ccd.domain.WorkAllocationFields;
 
 @ExtendWith(MockitoExtension.class)
-public class CaseAccessManagementDataMigrationTest {
-
+class CaseAccessManagementDataMigrationTest {
 
     private CaseAccessManagementDataMigration caseAccessManagementDataMigration;
-
     private SscsCaseData caseData;
 
     @BeforeEach
@@ -39,7 +45,7 @@ public class CaseAccessManagementDataMigrationTest {
     }
 
     @Test
-    public void testCategoriesForEmptyBenefitType(@Mock SscsCaseData caseDataMock) {
+    void testCategoriesForEmptyBenefitType(@Mock SscsCaseData caseDataMock) {
         when(caseDataMock.getAppeal()).thenReturn(Appeal.builder().build());
         when(caseDataMock.getWorkAllocationFields()).thenReturn(WorkAllocationFields.builder().build());
         caseAccessManagementDataMigration.apply(caseDataMock);
@@ -49,7 +55,7 @@ public class CaseAccessManagementDataMigrationTest {
     }
 
     @Test
-    public void testCategoriesForGivenBenefitType() {
+    void testCategoriesForGivenBenefitType() {
         caseAccessManagementDataMigration.apply(caseData);
 
         assertNotNull(caseData.getWorkAllocationFields());
@@ -59,7 +65,7 @@ public class CaseAccessManagementDataMigrationTest {
     }
 
     @Test
-    public void testCaseNameAppellant() {
+    void testCaseNameAppellant() {
         caseAccessManagementDataMigration.apply(caseData);
 
         assertEquals("First Last", caseData.getWorkAllocationFields().getCaseNameHmctsInternal());
@@ -68,7 +74,7 @@ public class CaseAccessManagementDataMigrationTest {
     }
 
     @Test
-    public void testOgdType() {
+    void testOgdType() {
         caseAccessManagementDataMigration.apply(caseData);
 
         assertEquals("DWP", caseData.getWorkAllocationFields().getOgdType());

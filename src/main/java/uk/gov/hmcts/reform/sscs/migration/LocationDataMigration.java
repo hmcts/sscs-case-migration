@@ -35,8 +35,8 @@ public class LocationDataMigration implements DataMigrationStep {
             CourtVenue courtVenue = refDataService.getVenueRefData(venue);
             if (courtVenue != null) {
                 sscsCaseData.setCaseManagementLocation(CaseManagementLocation.builder()
-                                                           .baseLocation(courtVenue.getEpimsId())
-                                                           .region(courtVenue.getRegionId()).build());
+                    .baseLocation(courtVenue.getEpimsId())
+                    .region(courtVenue.getRegionId()).build());
             }
         }
     }
