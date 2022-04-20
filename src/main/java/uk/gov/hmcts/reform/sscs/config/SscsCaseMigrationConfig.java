@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @EnableFeignClients(basePackages = {
-    "uk.gov.hmcts.reform.sscs.client","uk.gov.hmcts.reform.idam.client"
+    "uk.gov.hmcts.reform.sscs.client"
 })
 @ComponentScan(basePackages = "uk.gov.hmcts.reform.sscs", lazyInit = true)
 @PropertySource("classpath:application.properties")
