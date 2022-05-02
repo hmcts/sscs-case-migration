@@ -150,7 +150,7 @@ dependencyManagement {
 
 dependencies {
   implementation('org.springframework.cloud:spring-cloud-starter-bootstrap:3.1.0')
-  implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.0'
+  implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.2'
 
   implementation 'com.github.hmcts.ccd-case-migration-starter:domain:3.0.0'
   implementation 'com.github.hmcts.ccd-case-migration-starter:processor:3.0.0'
