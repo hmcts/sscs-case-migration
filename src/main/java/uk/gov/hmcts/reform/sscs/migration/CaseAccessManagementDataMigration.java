@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.sscs.migration;
 
-
 import java.util.Optional;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.sscs.ccd.domain.Appellant;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Benefit;
 import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
 
@@ -20,18 +20,20 @@ public class CaseAccessManagementDataMigration implements DataMigrationStep {
 
     private void addCaseCategories(SscsCaseData sscsCaseData) {
         Optional<Benefit> benefit = sscsCaseData.getBenefitType();
-        benefit.ifPresent(value -> sscsCaseData.getWorkAllocationFields().setCategories(value));
+        benefit.ifPresent(value -> sscsCaseData.getCaseAccessManagementFields().setCategories(value));
     }
 
     private void addCaseNames(SscsCaseData sscsCaseData) {
-        String caseName = sscsCaseData.getAppeal().getAppellant() != null
-            && sscsCaseData.getAppeal().getAppellant().getName() != null
-            ? sscsCaseData.getAppeal().getAppellant().getName().getFullNameNoTitle()
-            : null;
-        sscsCaseData.getWorkAllocationFields().setCaseNames(caseName);
+        final Appellant appellant = sscsCaseData.getAppeal().getAppellant();
+        if (appellant != null
+            && appellant.getName() != null) {
+            sscsCaseData.getCaseAccessManagementFields()
+                .setCaseNames(appellant.getName().getFullNameNoTitle());
+        }
+
     }
 
     private void setOgdTypeToDwp(SscsCaseData sscsCaseData) {
-        sscsCaseData.getWorkAllocationFields().setOgdType("DWP");
+        sscsCaseData.getCaseAccessManagementFields().setOgdType("DWP");
     }
 }
