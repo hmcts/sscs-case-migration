@@ -27,7 +27,7 @@ import uk.gov.hmcts.reform.sscs.config.SscsCaseMigrationConfig;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {CaseMigrationRunner.class, SscsCaseMigrationConfig.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class SscsDataMigrationServiceIt {
+public class SscsDataMigrationServiceIT {
 
     private static CaseDetails caseDetails;
     private static Map<String, Object> caseData = new HashMap<>();

@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.sscs.migration;
 
-
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
 import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
 import uk.gov.hmcts.reform.sscs.model.CourtVenue;
 import uk.gov.hmcts.reform.sscs.service.RefDataService;
-
 
 @Service
 @ConditionalOnProperty(value = "migration.location_data.enabled", havingValue = "true")
