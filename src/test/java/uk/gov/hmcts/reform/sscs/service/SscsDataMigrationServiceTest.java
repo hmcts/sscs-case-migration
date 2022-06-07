@@ -38,7 +38,7 @@ class SscsDataMigrationServiceTest {
     private SscsDataMigrationService sscsDataMigrationService;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         openMocks(this);
         sscsDataMigrationService = new SscsDataMigrationService(
             sscsCcdConvertService,

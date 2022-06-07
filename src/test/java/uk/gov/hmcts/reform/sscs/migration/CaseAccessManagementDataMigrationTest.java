@@ -15,9 +15,9 @@ import uk.gov.hmcts.reform.sscs.ccd.domain.Appeal;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Appellant;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Benefit;
 import uk.gov.hmcts.reform.sscs.ccd.domain.BenefitType;
+import uk.gov.hmcts.reform.sscs.ccd.domain.CaseAccessManagementFields;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Name;
 import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
-import uk.gov.hmcts.reform.sscs.ccd.domain.WorkAllocationFields;
 
 @ExtendWith(MockitoExtension.class)
 class CaseAccessManagementDataMigrationTest {
@@ -47,36 +47,36 @@ class CaseAccessManagementDataMigrationTest {
     @Test
     void testCategoriesForEmptyBenefitType(@Mock SscsCaseData caseDataMock) {
         when(caseDataMock.getAppeal()).thenReturn(Appeal.builder().build());
-        when(caseDataMock.getWorkAllocationFields()).thenReturn(WorkAllocationFields.builder().build());
+        when(caseDataMock.getCaseAccessManagementFields()).thenReturn(CaseAccessManagementFields.builder().build());
         caseAccessManagementDataMigration.apply(caseDataMock);
 
-        assertNull(caseDataMock.getWorkAllocationFields().getCaseAccessCategory());
-        assertNull(caseDataMock.getWorkAllocationFields().getCaseManagementCategory());
+        assertNull(caseDataMock.getCaseAccessManagementFields().getCaseAccessCategory());
+        assertNull(caseDataMock.getCaseAccessManagementFields().getCaseManagementCategory());
     }
 
     @Test
     void testCategoriesForGivenBenefitType() {
         caseAccessManagementDataMigration.apply(caseData);
 
-        assertNotNull(caseData.getWorkAllocationFields());
-        assertEquals("personalIndependencePayment", caseData.getWorkAllocationFields().getCaseAccessCategory());
-        assertEquals(Benefit.PIP.getShortName(), caseData.getWorkAllocationFields().getCaseManagementCategory().getListItems().get(0).getCode());
-        assertEquals(Benefit.PIP.getDescription(), caseData.getWorkAllocationFields().getCaseManagementCategory().getListItems().get(0).getLabel());
+        assertNotNull(caseData.getCaseAccessManagementFields());
+        assertEquals("personalIndependencePayment", caseData.getCaseAccessManagementFields().getCaseAccessCategory());
+        assertEquals(Benefit.PIP.getShortName(), caseData.getCaseAccessManagementFields().getCaseManagementCategory().getListItems().get(0).getCode());
+        assertEquals(Benefit.PIP.getDescription(), caseData.getCaseAccessManagementFields().getCaseManagementCategory().getListItems().get(0).getLabel());
     }
 
     @Test
     void testCaseNameAppellant() {
         caseAccessManagementDataMigration.apply(caseData);
 
-        assertEquals("First Last", caseData.getWorkAllocationFields().getCaseNameHmctsInternal());
-        assertEquals("First Last", caseData.getWorkAllocationFields().getCaseNameHmctsRestricted());
-        assertEquals("First Last", caseData.getWorkAllocationFields().getCaseNamePublic());
+        assertEquals("First Last", caseData.getCaseAccessManagementFields().getCaseNameHmctsInternal());
+        assertEquals("First Last", caseData.getCaseAccessManagementFields().getCaseNameHmctsRestricted());
+        assertEquals("First Last", caseData.getCaseAccessManagementFields().getCaseNamePublic());
     }
 
     @Test
     void testOgdType() {
         caseAccessManagementDataMigration.apply(caseData);
 
-        assertEquals("DWP", caseData.getWorkAllocationFields().getOgdType());
+        assertEquals("DWP", caseData.getCaseAccessManagementFields().getOgdType());
     }
 }

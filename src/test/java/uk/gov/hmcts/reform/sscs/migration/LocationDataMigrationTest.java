@@ -1,44 +1,55 @@
 package uk.gov.hmcts.reform.sscs.migration;
 
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-import org.junit.Ignore;
-import org.junit.jupiter.api.Assertions;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import uk.gov.hmcts.reform.sscs.ccd.domain.Appeal;
+import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
 import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
-import uk.gov.hmcts.reform.sscs.model.CourtVenue;
-import uk.gov.hmcts.reform.sscs.service.RefDataService;
+import uk.gov.hmcts.reform.sscs.migration.helper.PostcodeResolver;
+import uk.gov.hmcts.reform.sscs.migration.service.CaseManagementLocationService;
 
-
-public class LocationDataMigrationTest {
+@RunWith(MockitoJUnitRunner.class)
+class LocationDataMigrationTest {
 
     @Mock
-    private RefDataService refDataService;
+    private PostcodeResolver postcodeResolver;
 
+    @Mock
+    private CaseManagementLocationService caseManagementLocationService;
+
+    @InjectMocks
     private LocationDataMigration locationDataMigration;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         openMocks(this);
-        locationDataMigration = new LocationDataMigration(refDataService);
-        when(refDataService.getVenueRefData(anyString())).thenReturn(CourtVenue.builder().epimsId("epimms_id").regionId("region_id").build());
     }
 
-    @Ignore
     @Test
-    public void testRefData() {
-        SscsCaseData caseData = SscsCaseData.builder().build();
-        locationDataMigration.apply(caseData);
-        Assertions.assertNull(caseData.getCaseManagementLocation());
+    void shouldSetCaseManagementLocationFieldsAsExpected_givenValidCaseData() {
+        SscsCaseData caseData = SscsCaseData.builder()
+            .processingVenue("Bradford")
+            .appeal(Appeal.builder().build())
+            .build();
 
-        caseData.setProcessingVenue("Bradford");
+        when(postcodeResolver.resolvePostcode(Appeal.builder().build())).thenReturn("postcode");
+        when(caseManagementLocationService.retrieveCaseManagementLocation("Bradford", "postcode"))
+            .thenReturn(Optional.of(CaseManagementLocation.builder().baseLocation("rpcEpimsId").region("regionId").build()));
+
         locationDataMigration.apply(caseData);
-        Assertions.assertNotNull(caseData.getCaseManagementLocation());
-        Assertions.assertEquals("epimms_id", caseData.getCaseManagementLocation().getBaseLocation());
-        Assertions.assertEquals("region_id", caseData.getCaseManagementLocation().getRegion());
+
+        assertNotNull(caseData.getCaseManagementLocation());
+        assertThat(caseData.getCaseManagementLocation().getBaseLocation()).isEqualTo("rpcEpimsId");
+        assertThat(caseData.getCaseManagementLocation().getRegion()).isEqualTo("regionId");
     }
 }

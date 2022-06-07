@@ -1,25 +1,19 @@
 package uk.gov.hmcts.reform.sscs.migration;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
 import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
-import uk.gov.hmcts.reform.sscs.model.CourtVenue;
-import uk.gov.hmcts.reform.sscs.service.RefDataService;
+import uk.gov.hmcts.reform.sscs.migration.helper.PostcodeResolver;
+import uk.gov.hmcts.reform.sscs.migration.service.CaseManagementLocationService;
 
 @Service
+@RequiredArgsConstructor
 @ConditionalOnProperty(value = "migration.location_data.enabled", havingValue = "true")
 public class LocationDataMigration implements DataMigrationStep {
 
-    private final RefDataService refDataService;
-
-    @Autowired
-    public LocationDataMigration(RefDataService refDataService) {
-        this.refDataService = refDataService;
-    }
+    private final PostcodeResolver postcodeResolver;
+    private final CaseManagementLocationService caseManagementLocationService;
 
     @Override
     public void apply(SscsCaseData sscsCaseData) {
@@ -27,15 +21,10 @@ public class LocationDataMigration implements DataMigrationStep {
     }
 
     private void addCaseManagementLocation(SscsCaseData sscsCaseData) {
-        String venue = sscsCaseData.getProcessingVenue();
+        String processingVenueName = sscsCaseData.getProcessingVenue();
+        String postcode = postcodeResolver.resolvePostcode(sscsCaseData.getAppeal());
 
-        if (!isEmpty(venue)) {
-            CourtVenue courtVenue = refDataService.getVenueRefData(venue);
-            if (courtVenue != null) {
-                sscsCaseData.setCaseManagementLocation(CaseManagementLocation.builder()
-                    .baseLocation(courtVenue.getEpimsId())
-                    .region(courtVenue.getRegionId()).build());
-            }
-        }
+        caseManagementLocationService.retrieveCaseManagementLocation(processingVenueName, postcode)
+            .ifPresent(sscsCaseData::setCaseManagementLocation);
     }
 }
