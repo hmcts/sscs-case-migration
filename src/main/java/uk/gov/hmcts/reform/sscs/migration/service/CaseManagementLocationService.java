@@ -8,20 +8,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
 import uk.gov.hmcts.reform.sscs.model.CourtVenue;
-import uk.gov.hmcts.reform.sscs.service.RefDataService;
 
 @Service
 @RequiredArgsConstructor
 public class CaseManagementLocationService {
 
-    private final RefDataService refDataService;
+    private final CourtVenueService courtVenueService;
     private final RpcVenueService rpcVenueService;
 
     public Optional<CaseManagementLocation> retrieveCaseManagementLocation(String processingVenue, String postcode) {
         if (isNotBlank(processingVenue)
             && isNotBlank(postcode)) {
 
-            CourtVenue courtVenue = refDataService.getVenueRefData(processingVenue);
+            CourtVenue courtVenue = courtVenueService.lookupCourtVenueByName(processingVenue);
             String rpcEpimsId = rpcVenueService.retrieveRpcEpimsIdForPostcode(postcode);
 
             if (nonNull(courtVenue)
