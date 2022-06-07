@@ -5,12 +5,14 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.sscs.client.RefDataApi;
 import uk.gov.hmcts.reform.sscs.idam.IdamService;
 import uk.gov.hmcts.reform.sscs.idam.IdamTokens;
 import uk.gov.hmcts.reform.sscs.model.CourtVenue;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LocationRefDataService {
@@ -26,6 +28,7 @@ public class LocationRefDataService {
         if (idamTokens == null
             || (isBlank(idamTokens.getIdamOauth2Token())
                 && isBlank(idamTokens.getServiceAuthorization()))) {
+            log.error("Unable to retrieve IdamTokens");
             return Collections.emptyList();
         }
 
