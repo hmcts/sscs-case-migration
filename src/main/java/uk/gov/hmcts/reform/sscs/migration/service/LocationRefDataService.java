@@ -32,9 +32,13 @@ public class LocationRefDataService {
             return Collections.emptyList();
         }
 
-        return refDataApi.courtVenueByName(
+        List<CourtVenue> courtVenues = refDataApi.courtVenueByName(
             idamTokens.getIdamOauth2Token(),
             idamTokens.getServiceAuthorization(),
             SSCS_COURT_TYPE_ID);
+
+        log.info("Retrieved {} court venues from reference data.", courtVenues.size());
+
+        return courtVenues;
     }
 }
