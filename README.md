@@ -6,8 +6,9 @@
 
 ## Get the base repo
 
-Clone this https://github.com/hmcts/ccd-case-migration-starter.git
-Pull this branch - https://github.com/hmcts/ccd-case-migration-starter/tree/sscs-9911-improved
+Clone this - https://github.com/hmcts/ccd-case-migration-starter.git
+
+Then pull this branch - https://github.com/hmcts/ccd-case-migration-starter/tree/sscs-9911-improved
 
 In IntelliJ
 Run gradle build in the processor module which I have updated to use Elastic search
@@ -15,7 +16,8 @@ Then run publishToMavenLocal in gradle to add it to your local maven repository
 
 ## Get this repo
 
-Clone this https://github.com/hmcts/sscs-case-migration.git
+Clone this - https://github.com/hmcts/sscs-case-migration.git
+
 Then pull this branch - https://github.com/hmcts/sscs-case-migration/tree/sscs-9911-improved
 
 Then run clean and build and you will get a jar file at build/libs/sscs-case-migration.jar
@@ -26,41 +28,41 @@ The case migration tool is a spring command line application. This means it need
 
 To run the tool execute the jar file on the command line like so;
 
-java -jar sscs-case-migration.jar
+`java -jar sscs-case-migration.jar`
 
 We also need to provide certain parameters to the tool in order to function.
 
-The first of these is the --migration.caseId
+The first of these is the `--migration.caseId` parameter
 
-java -jar sscs-case-migration.jar --migration.caseId=1648028211163560
+`java -jar sscs-case-migration.jar --migration.caseId=1648028211163560`
 
 To run the tool you can do this to start and use a caseId that is on your local. 
 
-Alternatively you can use use the start and end date to control how many cases get updated -- like so;
+Alternatively you can use use `--migration.startDate` and `--migration.endDate` to control how many cases get updated -- like so;
 
-java -jar sscs-case-migration.jar --migration.startDate=2022-03-23 --migration.endDate=2022-03-25
+`java -jar sscs-case-migration.jar --migration.startDate=2022-03-23 --migration.endDate=2022-03-25`
 
 Run this and it will update your local for the dates between the start and end, the example above would process the 23rd and the 24th of March 2022 -- note that this is not inclusive so the 25th would not be included.
 
-If you specify --migration.dryrun to be false this will perform an update of a case. The example below will allow you to test updates are being done correctly on one case.
+If you specify `--migration.dryrun` to be false this will perform an update of a case. The example below will allow you to test updates are being done correctly on one case.
 
-java -jar sscs-case-migration.jar --migration.caseId=1648028211163560 --migration.dryrun=false
+`java -jar sscs-case-migration.jar --migration.caseId=1648028211163560 --migration.dryrun=false`
 
 Running with dry run enabled won’t update anything but will log the date of the oldest case to tell you where to start and will tell you the number of cases on each date so you can control the updates.
 
-We locally have application.properties files for demo, aat and perftest. We swap them out and build another jar file for each environment. The secrets for these can also be found in Azure vault. To run the tool with a different profile you can provide the --spring.profiles.active parameter like so;
+We locally have application.properties files for demo, aat and perftest. We swap them out and build another jar file for each environment. The secrets for these can also be found in Azure vault. To run the tool with a different profile you can provide the `--spring.profiles.active` parameter like so;
 
-java -jar sscs-case-migration.jar --spring.profiles.active=perftest --migration.caseId=1648028211163560
+`java -jar sscs-case-migration.jar --spring.profiles.active=perftest --migration.caseId=1648028211163560`
 
-An important addition to the tool is processing the cases in parallel streams to speed up operation. This has been benchmarked to reduce the total runtime of doing a 600k cases migration from 3 weeks down to 15 hours -- a significant time saving. The parallel streams was implemented in a way to be backwards compatible with the original code. This is disabled by default but can be enabled by using the migration.parallel parameter -- like so;
+An important addition to the tool is processing the cases in parallel streams to speed up operation. This has been benchmarked to reduce the total runtime of doing a 600k cases migration from 3 weeks down to 15 hours -- a significant time saving. The parallel streams was implemented in a way to be backwards compatible with the original code. This is disabled by default but can be enabled by using the `--migration.parallel` parameter -- like so;
 
-java -jar sscs-case-migration.jar --migration.startDate=2022-05-10  --migration.endDate=2022-05-12  --migration.parallel=false
+`java -jar sscs-case-migration.jar --migration.startDate=2022-05-10  --migration.endDate=2022-05-12  --migration.parallel=false`
 
 The command above will execute a dryrun between the two dates specified using parallel streams.
 
-By default the tool will fetch all the cases for a given day, even on a dryrun. If we were to try to get the sum of cases over a particular period this would take quite a long time. This is why we (Waqas mainly) have included the --migration.indexCases parameter. By default this will be set as false but if enabled it will return early when sequencing the cases between a given set of dates. Meaning that we can index the cases much faster in the case of doing the production migration for example. It is recommended not to run this with parallel streams so the log output is in date sequence ascending order.
+By default the tool will fetch all the cases for a given day, even on a dryrun. If we were to try to get the sum of cases over a particular period this would take quite a long time. This is why we (Waqas mainly) have included the `--migration.indexCases` parameter. By default this will be set as false but if enabled it will return early when sequencing the cases between a given set of dates. Meaning that we can index the cases much faster in the case of doing the production migration for example. It is recommended not to run this with parallel streams so the log output is in date sequence ascending order.
 
-java -jar sscs-case-migration.jar --migration.startDate=2022-05-10  --migration.endDate=2022-05-12  --migration.indexCases=true
+`java -jar sscs-case-migration.jar --migration.startDate=2022-05-10  --migration.endDate=2022-05-12  --migration.indexCases=true`
 
 The command above will index the cases between the given dates and output the number of cases on the 10th and 11th May 2022.
 
