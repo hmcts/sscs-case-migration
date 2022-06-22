@@ -24,7 +24,7 @@ Then run clean and build and you will get a jar file at build/libs/sscs-case-mig
 
 ## Run case migration tool
 
-The case migration tool is a spring command line application. This means it needs to be run from the command line using the jar we previously built. When you run the tool don't worry about accidentally performing updates as it does a dryrun by default. For the tool to work you will also need to be connected to the hmcts VPN to access the internal services, this will also allow you to test that you are connecting with IDAM and CCD.
+The case migration tool is a spring command line application. This means it needs to be run from the command line using the jar we previously built. When you run the tool don't worry about accidentally performing updates as it does a dryrun by default (this is specified in the spring properties files). For the tool to work you will also need to be connected to the hmcts VPN to access the internal services, this will also allow you to test that you are connecting with IDAM and CCD.
 
 To run the tool execute the jar file on the command line like so;
 
