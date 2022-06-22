@@ -10,9 +10,9 @@ Clone this - https://github.com/hmcts/ccd-case-migration-starter.git
 
 Then pull this branch - https://github.com/hmcts/ccd-case-migration-starter/tree/sscs-9911-improved
 
-In IntelliJ
-Run gradle build in the processor module which I have updated to use Elastic search
-Then run publishToMavenLocal in gradle to add it to your local maven repository
+In IntelliJ run `gradle build` in the processor module
+
+Then run `gradle publishToMavenLocal` to add it to your local maven repository.
 
 ## Get this repo
 
@@ -20,7 +20,7 @@ Clone this - https://github.com/hmcts/sscs-case-migration.git
 
 Then pull this branch - https://github.com/hmcts/sscs-case-migration/tree/sscs-9911-improved
 
-Then run clean and build and you will get a jar file at build/libs/sscs-case-migration.jar
+Then run clean and build and you will get a jar file at `build/libs/sscs-case-migration.jar`
 
 ## Run case migration tool
 
