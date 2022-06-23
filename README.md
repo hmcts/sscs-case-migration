@@ -20,7 +20,7 @@ Clone this - https://github.com/hmcts/sscs-case-migration.git
 
 Then pull this branch - https://github.com/hmcts/sscs-case-migration/tree/sscs-9911-improved
 
-Then run clean and build and you will get a jar file at `build/libs/sscs-case-migration.jar`
+Then run `gradle clean build` and you will get a jar file at `build/libs/sscs-case-migration.jar`
 
 ## Run case migration tool
 
