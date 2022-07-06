@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.sscs.ccd.domain.Address;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Appeal;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Appellant;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Appointee;
+import uk.gov.hmcts.reform.sscs.ccd.domain.YesNo;
 
 class PostcodeResolverTest {
 
@@ -16,6 +17,7 @@ class PostcodeResolverTest {
     void shouldReturnBlankPostcode_givenAppointeeAndAppellantPostcodeDoNotExist() {
         Appellant testAppellant = Appellant.builder()
             .address(Address.builder().build())
+            .isAppointee(YesNo.YES.getValue())
             .appointee(Appointee.builder()
                 .address(Address.builder().build())
                 .build())
@@ -30,7 +32,7 @@ class PostcodeResolverTest {
 
     @Test
     void shouldReturnBlankPostcode_givenAppointeeAndAppellantAddressDoNotExist() {
-        Appellant testAppellant = Appellant.builder().build();
+        Appellant testAppellant = Appellant.builder().isAppointee(YesNo.YES.getValue()).build();
 
         String actualPostcode = unitUnderTest.resolvePostcode(Appeal.builder()
             .appellant(testAppellant)

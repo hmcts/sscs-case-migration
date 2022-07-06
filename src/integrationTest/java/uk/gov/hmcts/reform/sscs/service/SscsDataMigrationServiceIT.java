@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.sscs.service;
 
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
@@ -22,6 +23,9 @@ import uk.gov.hmcts.reform.migration.ccd.CoreCaseDataService;
 import uk.gov.hmcts.reform.sscs.ccd.domain.*;
 import uk.gov.hmcts.reform.sscs.ccd.service.SscsCcdConvertService;
 import uk.gov.hmcts.reform.sscs.config.SscsCaseMigrationConfig;
+import uk.gov.hmcts.reform.sscs.migration.service.CourtVenueService;
+import uk.gov.hmcts.reform.sscs.migration.service.LocationRefDataService;
+import uk.gov.hmcts.reform.sscs.model.CourtVenue;
 
 
 @RunWith(SpringRunner.class)
@@ -48,6 +52,10 @@ public class SscsDataMigrationServiceIT {
         @Primary
         public SscsCcdConvertService mockSscsCcdConvertService() {
             sscsCaseData = SscsCaseData.builder()
+                .regionalProcessingCenter(RegionalProcessingCenter.builder()
+                    .epimsId("12345")
+                    .build())
+                .processingVenue("venue")
                 .appeal(Appeal.builder()
                     .benefitType(BenefitType.builder()
                      .code("PIP")
@@ -57,6 +65,9 @@ public class SscsDataMigrationServiceIT {
                          .firstName("First")
                          .lastName("Last")
                          .build())
+                        .address(Address.builder()
+                            .postcode("TS1 1ST")
+                            .build())
                        .build())
                     .build())
                 .build();
@@ -73,6 +84,32 @@ public class SscsDataMigrationServiceIT {
             when(idc.getUserDetails("token")).thenReturn(UserDetails.builder().id("id").build());
             return idc;
         }
+
+        @Bean
+        @Primary
+        public LocationRefDataService mockLocationRefDataService() {
+            LocationRefDataService mockLocationRefDataService = mock(LocationRefDataService.class);
+            when(mockLocationRefDataService.retrieveCourtVenues()).thenReturn(new ArrayList<>());
+            return mockLocationRefDataService;
+        }
+
+        @Bean
+        @Primary
+        public CourtVenueService mockCourtVenueServiceService() {
+            CourtVenueService mockCourtVenueService = mock(CourtVenueService.class);
+            when(mockCourtVenueService.lookupCourtVenueByName(any(String.class)))
+                .thenReturn(CourtVenue.builder().region("Somewhere").regionId("10").build());
+            return mockCourtVenueService;
+        }
+
+        @Bean
+        @Primary
+        public RegionalProcessingCenterService mockRegionalProcessingCenterServicee() {
+            RegionalProcessingCenterService mockRegionalProcessingCenterService = mock(RegionalProcessingCenterService.class);
+            when(mockRegionalProcessingCenterService.getByPostcode(any(String.class)))
+                .thenReturn(RegionalProcessingCenter.builder().epimsId("8888").build());
+            return mockRegionalProcessingCenterService;
+        }
     }
 
     @Autowired
@@ -87,6 +124,14 @@ public class SscsDataMigrationServiceIT {
     @Autowired
     private SscsDataMigrationService sscsDataMigrationService;
 
+    @Autowired
+    private LocationRefDataService locationRefDataService;
+
+    @Autowired
+    private CourtVenueService courtVenueService;
+
+    @Autowired
+    private RegionalProcessingCenterService regionalProcessingCenterService;
 
     @Test
     public void verifyServiceCall() {

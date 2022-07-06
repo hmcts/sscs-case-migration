@@ -7,27 +7,31 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
+import uk.gov.hmcts.reform.sscs.ccd.domain.RegionalProcessingCenter;
 import uk.gov.hmcts.reform.sscs.model.CourtVenue;
+import uk.gov.hmcts.reform.sscs.service.RegionalProcessingCenterService;
 
 @Service
 @RequiredArgsConstructor
 public class CaseManagementLocationService {
 
     private final CourtVenueService courtVenueService;
-    private final RpcVenueService rpcVenueService;
 
-    public Optional<CaseManagementLocation> retrieveCaseManagementLocation(String processingVenue, String postcode) {
+    private final RegionalProcessingCenterService regionalProcessingCenterService;
+
+    public Optional<CaseManagementLocation> retrieveCaseManagementLocation(String processingVenue,
+                                                                           String postcode) {
         if (isNotBlank(processingVenue)
             && isNotBlank(postcode)) {
 
             CourtVenue courtVenue = courtVenueService.lookupCourtVenueByName(processingVenue);
-            String rpcEpimsId = rpcVenueService.retrieveRpcEpimsIdForPostcode(postcode);
+            RegionalProcessingCenter regionalProcessingCenter = regionalProcessingCenterService.getByPostcode(postcode);
 
             if (nonNull(courtVenue)
                 && isNotBlank(courtVenue.getRegionId())
-                && isNotBlank(rpcEpimsId)) {
+                && nonNull(regionalProcessingCenter)) {
                 return Optional.of(CaseManagementLocation.builder()
-                    .baseLocation(rpcEpimsId)
+                    .baseLocation(regionalProcessingCenter.getEpimsId())
                     .region(courtVenue.getRegionId())
                     .build());
             }

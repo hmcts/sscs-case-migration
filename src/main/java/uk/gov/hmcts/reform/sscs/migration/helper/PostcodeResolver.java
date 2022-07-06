@@ -8,18 +8,25 @@ import uk.gov.hmcts.reform.sscs.ccd.domain.Address;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Appeal;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Appellant;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Appointee;
+import uk.gov.hmcts.reform.sscs.ccd.domain.YesNo;
 
 @Component
 public class PostcodeResolver {
 
     public String resolvePostcode(@NonNull Appeal appeal) {
-        return Optional.ofNullable(appeal.getAppellant())
-            .map(Appellant::getAppointee)
-            .map(Appointee::getAddress)
-            .map(Address::getPostcode)
-            .orElse(Optional.ofNullable(appeal.getAppellant())
-                .map(Appellant::getAddress)
+        Appellant appellant = appeal.getAppellant();
+        String postcode;
+
+        if (YesNo.isYes(appellant.getIsAppointee())) {
+            postcode = Optional.ofNullable(appellant.getAppointee())
+                .map(Appointee::getAddress)
                 .map(Address::getPostcode)
-                .orElse(StringUtils.EMPTY));
+                .filter(StringUtils::isEmpty)
+                .orElse(StringUtils.EMPTY);
+        } else {
+            postcode = appellant.getAddress().getPostcode();
+        }
+
+        return postcode;
     }
 }

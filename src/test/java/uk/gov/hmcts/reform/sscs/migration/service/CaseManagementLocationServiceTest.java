@@ -12,7 +12,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
+import uk.gov.hmcts.reform.sscs.ccd.domain.RegionalProcessingCenter;
 import uk.gov.hmcts.reform.sscs.model.CourtVenue;
+import uk.gov.hmcts.reform.sscs.service.RegionalProcessingCenterService;
 
 @RunWith(MockitoJUnitRunner.class)
 class CaseManagementLocationServiceTest {
@@ -21,7 +23,7 @@ class CaseManagementLocationServiceTest {
     private CourtVenueService courtVenueService;
 
     @Mock
-    private RpcVenueService rpcVenueService;
+    private RegionalProcessingCenterService regionalProcessingCenterService;
 
     @InjectMocks
     private CaseManagementLocationService caseManagementLocationService;
@@ -33,6 +35,7 @@ class CaseManagementLocationServiceTest {
 
     @Test
     void shouldNotRetrieveCaseManagementLocation_givenBlankProcessingVenue() {
+        RegionalProcessingCenter rpc = RegionalProcessingCenter.builder().build();
         Optional<CaseManagementLocation> caseManagementLocation =
             caseManagementLocationService.retrieveCaseManagementLocation("", "postcode");
 
@@ -50,6 +53,8 @@ class CaseManagementLocationServiceTest {
     @Test
     void shouldNotRetrieveCaseManagementLocation_givenInvalidProcessingVenue() {
         when(courtVenueService.lookupCourtVenueByName("Bradford")).thenReturn(null);
+        when(regionalProcessingCenterService.getByPostcode("BD1 1RX"))
+            .thenReturn(RegionalProcessingCenter.builder().epimsId("rpcEpimsId").build());
 
         Optional<CaseManagementLocation> caseManagementLocation =
             caseManagementLocationService.retrieveCaseManagementLocation("Bradford", "BD1 1RX");
@@ -58,9 +63,18 @@ class CaseManagementLocationServiceTest {
     }
 
     @Test
+    void shouldNotRetrieveCaseManagementLocation_givenNullRpc() {
+        when(courtVenueService.lookupCourtVenueByName("Bradford")).thenReturn(CourtVenue.builder().regionId("regionId").build());
+        Optional<CaseManagementLocation> caseManagementLocation =
+            caseManagementLocationService.retrieveCaseManagementLocation("Bradford", null);
+
+        assertThat(caseManagementLocation).isEmpty();
+    }
+
+    @Test
     void shouldNotRetrieveCaseManagementLocation_givenInvalidCourtVenue() {
         when(courtVenueService.lookupCourtVenueByName("Bradford")).thenReturn(CourtVenue.builder().build());
-
+        RegionalProcessingCenter rpc = RegionalProcessingCenter.builder().build();
         Optional<CaseManagementLocation> caseManagementLocation =
             caseManagementLocationService.retrieveCaseManagementLocation("Bradford", "BD1 1RX");
 
@@ -70,7 +84,7 @@ class CaseManagementLocationServiceTest {
     @Test
     void shouldNotRetrieveCaseManagementLocation_givenInvalidPostcode() {
         when(courtVenueService.lookupCourtVenueByName("Bradford")).thenReturn(CourtVenue.builder().regionId("regionId").build());
-        when(rpcVenueService.retrieveRpcEpimsIdForPostcode("BD1 1RX")).thenReturn(null);
+        when(regionalProcessingCenterService.getByPostcode("BD1 1RX")).thenReturn(null);
 
         Optional<CaseManagementLocation> caseManagementLocation =
             caseManagementLocationService.retrieveCaseManagementLocation("Bradford", "BD1 1RX");
@@ -81,7 +95,8 @@ class CaseManagementLocationServiceTest {
     @Test
     void shouldRetrieveCaseManagementLocation_givenValidProcessingVenue_andPostcode() {
         when(courtVenueService.lookupCourtVenueByName("Bradford")).thenReturn(CourtVenue.builder().regionId("regionId").build());
-        when(rpcVenueService.retrieveRpcEpimsIdForPostcode("BD1 1RX")).thenReturn("rpcEpimsId");
+        when(regionalProcessingCenterService.getByPostcode("BD1 1RX"))
+            .thenReturn(RegionalProcessingCenter.builder().epimsId("rpcEpimsId").build());
 
         Optional<CaseManagementLocation> caseManagementLocation =
             caseManagementLocationService.retrieveCaseManagementLocation("Bradford", "BD1 1RX");

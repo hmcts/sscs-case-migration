@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Appeal;
 import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
+import uk.gov.hmcts.reform.sscs.ccd.domain.RegionalProcessingCenter;
 import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
 import uk.gov.hmcts.reform.sscs.migration.helper.PostcodeResolver;
 import uk.gov.hmcts.reform.sscs.migration.service.CaseManagementLocationService;
@@ -40,10 +41,12 @@ class LocationDataMigrationTest {
         SscsCaseData caseData = SscsCaseData.builder()
             .processingVenue("Bradford")
             .appeal(Appeal.builder().build())
+            .regionalProcessingCenter(RegionalProcessingCenter.builder().epimsId("rpcEpimsId").build())
             .build();
 
         when(postcodeResolver.resolvePostcode(Appeal.builder().build())).thenReturn("postcode");
-        when(caseManagementLocationService.retrieveCaseManagementLocation("Bradford", "postcode"))
+        when(caseManagementLocationService.retrieveCaseManagementLocation("Bradford",
+            "postcode"))
             .thenReturn(Optional.of(CaseManagementLocation.builder().baseLocation("rpcEpimsId").region("regionId").build()));
 
         locationDataMigration.apply(caseData);

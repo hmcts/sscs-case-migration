@@ -16,18 +16,20 @@ import uk.gov.hmcts.reform.sscs.service.SscsDataMigrationServiceIT;
     "migration.dryrun=false"})
 public class CaseAccessManagementDataMigrationIT extends SscsDataMigrationServiceIT {
 
+    public static final String NAME = "First Last";
     @Autowired
     private CaseAccessManagementDataMigration caseAccessManagementDataMigration;
 
     @Test
     public void verifyServiceCall() {
+        caseAccessManagementDataMigration.apply(sscsCaseData);
         assertNotNull(sscsCaseData.getCaseAccessManagementFields());
         assertEquals("personalIndependencePayment", sscsCaseData.getCaseAccessManagementFields().getCaseAccessCategory());
         assertEquals(Benefit.PIP.getShortName(), sscsCaseData.getCaseAccessManagementFields().getCaseManagementCategory().getListItems().get(0).getCode());
         assertEquals(Benefit.PIP.getDescription(), sscsCaseData.getCaseAccessManagementFields().getCaseManagementCategory().getListItems().get(0).getLabel());
-        assertEquals("First Last", sscsCaseData.getCaseAccessManagementFields().getCaseNameHmctsInternal());
-        assertEquals("First Last", sscsCaseData.getCaseAccessManagementFields().getCaseNameHmctsRestricted());
-        assertEquals("First Last", sscsCaseData.getCaseAccessManagementFields().getCaseNamePublic());
+        assertEquals(NAME, sscsCaseData.getCaseAccessManagementFields().getCaseNameHmctsInternal());
+        assertEquals(NAME, sscsCaseData.getCaseAccessManagementFields().getCaseNameHmctsRestricted());
+        assertEquals(NAME, sscsCaseData.getCaseAccessManagementFields().getCaseNamePublic());
         assertEquals("DWP", sscsCaseData.getCaseAccessManagementFields().getOgdType());
     }
 

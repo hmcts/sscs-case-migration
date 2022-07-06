@@ -18,7 +18,6 @@ import uk.gov.hmcts.reform.sscs.migration.DataMigrationStep;
 public class SscsDataMigrationService implements DataMigrationService<SscsCaseData> {
 
     private static final String JURISDICTION = "SSCS";
-
     private final SscsCcdConvertService sscsCcdConvertService;
     private final List<DataMigrationStep> dataMigrationSteps;
 
