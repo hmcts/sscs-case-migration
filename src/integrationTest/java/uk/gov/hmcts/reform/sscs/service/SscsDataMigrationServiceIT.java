@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
@@ -31,6 +32,13 @@ import uk.gov.hmcts.reform.sscs.model.CourtVenue;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {CaseMigrationRunner.class, SscsCaseMigrationConfig.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestPropertySource(properties = {
+    "migration.case_access_management.enabled=true",
+    "migration.startDate=2022-03-01",
+    "migration.endDate=2022-03-30",
+    "migration.indexCases=false",
+    "migration.parallel=false",
+    "migration.dryrun=false"})
 public class SscsDataMigrationServiceIT {
 
     private static CaseDetails caseDetails;

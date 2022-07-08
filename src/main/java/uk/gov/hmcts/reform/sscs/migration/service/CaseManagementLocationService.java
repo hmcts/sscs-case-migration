@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
 import uk.gov.hmcts.reform.sscs.ccd.domain.RegionalProcessingCenter;
@@ -12,6 +13,7 @@ import uk.gov.hmcts.reform.sscs.model.CourtVenue;
 import uk.gov.hmcts.reform.sscs.service.RegionalProcessingCenterService;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class CaseManagementLocationService {
 
@@ -34,6 +36,9 @@ public class CaseManagementLocationService {
                     .baseLocation(regionalProcessingCenter.getEpimsId())
                     .region(courtVenue.getRegionId())
                     .build());
+            } else {
+                log.error("  Unable to resolve required case management location details: court venue: {}, regional processing centre: {}",
+                    courtVenue, regionalProcessingCenter);
             }
         }
         return Optional.empty();

@@ -1,26 +1,23 @@
 package uk.gov.hmcts.reform.sscs.migration.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.sscs.client.RefDataApi;
 import uk.gov.hmcts.reform.sscs.idam.IdamService;
 import uk.gov.hmcts.reform.sscs.idam.IdamTokens;
 import uk.gov.hmcts.reform.sscs.model.CourtVenue;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 class LocationRefDataServiceTest {
 
     private static final String SSCS_COURT_TYPE_ID = "31";
@@ -34,45 +31,37 @@ class LocationRefDataServiceTest {
     @InjectMocks
     private LocationRefDataService locationRefDataService;
 
-    @BeforeEach
-    void setup() {
-        openMocks(this);
-    }
 
-    @Test
-    void shouldReturnEmptyList_givenIdamTokensIsNull() {
-        List<CourtVenue> courtVenues = locationRefDataService.retrieveCourtVenues();
-
-        verifyNoInteractions(refDataApi);
-        assertThat(courtVenues).isEmpty();
-    }
-
-    @Test
-    void shouldReturnEmptyList_givenIdamTokensIsEmpty() {
+    @ParameterizedTest
+    @CsvSource(value = {",", "'',", ",''", "'',''"})
+    void shouldThrowIllegalStateException_givenIdamTokensOrServiceAuthIsBlank(String idamToken, String serviceAuth) {
         when(idamService.getIdamTokens()).thenReturn(IdamTokens.builder()
-            .idamOauth2Token(StringUtils.EMPTY)
-            .serviceAuthorization(StringUtils.EMPTY)
+            .idamOauth2Token(idamToken)
+            .serviceAuthorization(serviceAuth)
             .build());
 
-        List<CourtVenue> courtVenues = locationRefDataService.retrieveCourtVenues();
+        assertThatExceptionOfType(IllegalStateException.class)
+            .isThrownBy(locationRefDataService::retrieveCourtVenues);
 
-        verifyNoInteractions(refDataApi);
-        assertThat(courtVenues).isEmpty();
     }
 
     @Test
     void shouldCallRefDataApiAsExpected_givenValidIdamTokensIsPresent() {
+        String idamToken = "idamOauth2Token";
+        String serviceAuth = "serviceAuthorization";
+        CourtVenue venue = CourtVenue.builder().regionId("2").build();
         when(idamService.getIdamTokens()).thenReturn(IdamTokens.builder()
-            .idamOauth2Token("idamOauth2Token")
-            .serviceAuthorization("serviceAuthorization")
+            .idamOauth2Token(idamToken)
+            .serviceAuthorization(serviceAuth)
             .build());
 
-        locationRefDataService.retrieveCourtVenues();
+        when(refDataApi.courtVenueByName(idamToken, serviceAuth, SSCS_COURT_TYPE_ID)).thenReturn(List.of(
+            venue));
+        List<CourtVenue> result =  locationRefDataService.retrieveCourtVenues();
 
-        verify(refDataApi, times(1)).courtVenueByName(
-            "idamOauth2Token",
-            "serviceAuthorization",
-            SSCS_COURT_TYPE_ID);
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0)).isEqualTo(venue);
+
     }
 
 }

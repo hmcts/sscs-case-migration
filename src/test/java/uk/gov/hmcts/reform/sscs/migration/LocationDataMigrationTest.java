@@ -3,15 +3,13 @@ package uk.gov.hmcts.reform.sscs.migration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Appeal;
 import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
 import uk.gov.hmcts.reform.sscs.ccd.domain.RegionalProcessingCenter;
@@ -19,7 +17,7 @@ import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
 import uk.gov.hmcts.reform.sscs.migration.helper.PostcodeResolver;
 import uk.gov.hmcts.reform.sscs.migration.service.CaseManagementLocationService;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 class LocationDataMigrationTest {
 
     @Mock
@@ -30,11 +28,6 @@ class LocationDataMigrationTest {
 
     @InjectMocks
     private LocationDataMigration locationDataMigration;
-
-    @BeforeEach
-    void setup() {
-        openMocks(this);
-    }
 
     @Test
     void shouldSetCaseManagementLocationFieldsAsExpected_givenValidCaseData() {

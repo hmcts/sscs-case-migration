@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.sscs.migration.service;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +27,7 @@ public class LocationRefDataService {
         if (idamTokens == null
             || (isBlank(idamTokens.getIdamOauth2Token())
                 && isBlank(idamTokens.getServiceAuthorization()))) {
-            log.error("Unable to retrieve IdamTokens");
-            return Collections.emptyList();
+            throw new IllegalStateException("Unable to retrieve IdamTokens");
         }
 
         List<CourtVenue> courtVenues = refDataApi.courtVenueByName(

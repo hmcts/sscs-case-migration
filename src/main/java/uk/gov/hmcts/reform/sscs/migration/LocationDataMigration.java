@@ -21,8 +21,9 @@ public class LocationDataMigration implements DataMigrationStep {
 
     @Override
     public void apply(SscsCaseData sscsCaseData) {
-        log.info("Applying location data migration steps for case: {} ", sscsCaseData.getCaseReference());
+        log.info("Applying location data migration steps for case: {} - Started", sscsCaseData.getCaseReference());
         addCaseManagementLocation(sscsCaseData);
+        log.info("Applying location data migration steps for case: {} - Completed", sscsCaseData.getCaseReference());
     }
 
     private void addCaseManagementLocation(SscsCaseData sscsCaseData) {
@@ -30,17 +31,19 @@ public class LocationDataMigration implements DataMigrationStep {
 
         String postcode = postcodeResolver.resolvePostcode(sscsCaseData.getAppeal());
 
+        log.info("  Attempting to retrieve case management location");
         Optional<CaseManagementLocation>
             locationOptional = caseManagementLocationService.retrieveCaseManagementLocation(processingVenueName, postcode);
 
         if (locationOptional.isPresent()) {
             CaseManagementLocation location = locationOptional.get();
-            log.info("Setting case management location fields for case {}: Region: {}, Base location: {}.",
-                sscsCaseData.getCaseReference(), location.getRegion(), location.getBaseLocation());
 
             sscsCaseData.setCaseManagementLocation(location);
+
+            log.info("  Case management location fields for case {} set: Region: {}, Base location: {}.",
+                sscsCaseData.getCaseReference(), location.getRegion(), location.getBaseLocation());
         } else {
-            log.error("Unable to resolve case management location for case: {}", sscsCaseData.getCaseReference());
+            log.error("  Unable to resolve case management location for case: {}", sscsCaseData.getCaseReference());
         }
     }
 }

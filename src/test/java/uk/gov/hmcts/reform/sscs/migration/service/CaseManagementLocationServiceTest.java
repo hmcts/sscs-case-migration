@@ -2,21 +2,19 @@ package uk.gov.hmcts.reform.sscs.migration.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
 import uk.gov.hmcts.reform.sscs.ccd.domain.RegionalProcessingCenter;
 import uk.gov.hmcts.reform.sscs.model.CourtVenue;
 import uk.gov.hmcts.reform.sscs.service.RegionalProcessingCenterService;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 class CaseManagementLocationServiceTest {
 
     @Mock
@@ -27,11 +25,6 @@ class CaseManagementLocationServiceTest {
 
     @InjectMocks
     private CaseManagementLocationService caseManagementLocationService;
-
-    @BeforeEach
-    void setup() {
-        openMocks(this);
-    }
 
     @Test
     void shouldNotRetrieveCaseManagementLocation_givenBlankProcessingVenue() {
@@ -64,7 +57,6 @@ class CaseManagementLocationServiceTest {
 
     @Test
     void shouldNotRetrieveCaseManagementLocation_givenNullRpc() {
-        when(courtVenueService.lookupCourtVenueByName("Bradford")).thenReturn(CourtVenue.builder().regionId("regionId").build());
         Optional<CaseManagementLocation> caseManagementLocation =
             caseManagementLocationService.retrieveCaseManagementLocation("Bradford", null);
 
