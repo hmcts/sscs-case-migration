@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.sscs.service;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,7 +21,7 @@ import uk.gov.hmcts.reform.sscs.ccd.service.SscsCcdConvertService;
 import uk.gov.hmcts.reform.sscs.migration.CaseAccessManagementDataMigration;
 import uk.gov.hmcts.reform.sscs.migration.LocationDataMigration;
 
-public class SscsDataMigrationServiceTest {
+class SscsDataMigrationServiceTest {
 
     @Mock
     private CaseAccessManagementDataMigration caseAccessManagementDataMigration;
@@ -35,18 +37,20 @@ public class SscsDataMigrationServiceTest {
 
     private SscsDataMigrationService sscsDataMigrationService;
 
-    private SscsCaseData sscsCaseData;
-
     @BeforeEach
-    public void setup() {
+    void setup() {
         openMocks(this);
-        sscsDataMigrationService = new SscsDataMigrationService(sscsCcdConvertService, List.of(caseAccessManagementDataMigration, locationDataMigration));
-        sscsCaseData = SscsCaseData.builder().ccdCaseId("id_1").build();
-        when(sscsCcdConvertService.getCaseData(anyMap())).thenReturn(sscsCaseData);
+        sscsDataMigrationService = new SscsDataMigrationService(
+            sscsCcdConvertService,
+            List.of(caseAccessManagementDataMigration, locationDataMigration));
+
+        when(sscsCcdConvertService.getCaseData(anyMap())).thenReturn(SscsCaseData.builder()
+            .ccdCaseId("id_1")
+            .build());
     }
 
     @Test
-    public void testExecutionOfMigrationSteps() {
+    void testExecutionOfMigrationSteps() {
         sscsDataMigrationService.migrate(Map.of());
 
         verify(caseAccessManagementDataMigration).apply(capture.capture());
@@ -58,7 +62,7 @@ public class SscsDataMigrationServiceTest {
     }
 
     @Test
-    public void accesptSscsCase() {
+    void acceptsSscsCase() {
         assertFalse(sscsDataMigrationService.accepts().test(null));
         assertFalse(sscsDataMigrationService.accepts().test(CaseDetails.builder().jurisdiction("SSCS").build()));
         assertFalse(sscsDataMigrationService.accepts().test(CaseDetails.builder().data(Map.of()).jurisdiction("OTHER").build()));

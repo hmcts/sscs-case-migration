@@ -1,43 +1,49 @@
 package uk.gov.hmcts.reform.sscs.migration;
 
-
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
 import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
-import uk.gov.hmcts.reform.sscs.model.CourtVenue;
-import uk.gov.hmcts.reform.sscs.service.RefDataService;
-
+import uk.gov.hmcts.reform.sscs.migration.helper.PostcodeResolver;
+import uk.gov.hmcts.reform.sscs.migration.service.CaseManagementLocationService;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 @ConditionalOnProperty(value = "migration.location_data.enabled", havingValue = "true")
 public class LocationDataMigration implements DataMigrationStep {
 
-    private final RefDataService refDataService;
-
-    @Autowired
-    public LocationDataMigration(RefDataService refDataService) {
-        this.refDataService = refDataService;
-    }
+    private final PostcodeResolver postcodeResolver;
+    private final CaseManagementLocationService caseManagementLocationService;
 
     @Override
     public void apply(SscsCaseData sscsCaseData) {
+        log.info("Applying location data migration steps for case: {} - Started", sscsCaseData.getCaseReference());
         addCaseManagementLocation(sscsCaseData);
+        log.info("Applying location data migration steps for case: {} - Completed", sscsCaseData.getCaseReference());
     }
 
     private void addCaseManagementLocation(SscsCaseData sscsCaseData) {
-        String venue = sscsCaseData.getProcessingVenue();
+        String processingVenueName = sscsCaseData.getProcessingVenue();
 
-        if (!isEmpty(venue)) {
-            CourtVenue courtVenue = refDataService.getVenueRefData(venue);
-            if (courtVenue != null) {
-                sscsCaseData.setCaseManagementLocation(CaseManagementLocation.builder()
-                                                           .baseLocation(courtVenue.getEpimsId())
-                                                           .region(courtVenue.getRegionId()).build());
-            }
+        String postcode = postcodeResolver.resolvePostcode(sscsCaseData.getAppeal());
+
+        log.info("  Attempting to retrieve case management location");
+        Optional<CaseManagementLocation>
+            locationOptional = caseManagementLocationService.retrieveCaseManagementLocation(processingVenueName, postcode);
+
+        if (locationOptional.isPresent()) {
+            CaseManagementLocation location = locationOptional.get();
+
+            sscsCaseData.setCaseManagementLocation(location);
+
+            log.info("  Case management location fields for case {} set: Region: {}, Base location: {}.",
+                sscsCaseData.getCaseReference(), location.getRegion(), location.getBaseLocation());
+        } else {
+            log.error("  Unable to resolve case management location for case: {}", sscsCaseData.getCaseReference());
         }
     }
 }
