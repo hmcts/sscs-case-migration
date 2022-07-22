@@ -38,7 +38,8 @@ import uk.gov.hmcts.reform.sscs.model.CourtVenue;
     "migration.endDate=2022-03-30",
     "migration.indexCases=false",
     "migration.parallel=false",
-    "migration.dryrun=false"})
+    "migration.dryrun=false",
+    "migration.maxCasesToProcess=100"})
 public class SscsDataMigrationServiceIT {
 
     private static CaseDetails caseDetails;
