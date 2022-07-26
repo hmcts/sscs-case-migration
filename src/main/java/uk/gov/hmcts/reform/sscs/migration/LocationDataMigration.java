@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
 import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
+import uk.gov.hmcts.reform.sscs.exception.MigrationException;
 import uk.gov.hmcts.reform.sscs.migration.helper.PostcodeResolver;
 import uk.gov.hmcts.reform.sscs.migration.service.CaseManagementLocationService;
 
@@ -31,7 +32,8 @@ public class LocationDataMigration implements DataMigrationStep {
 
         String postcode = postcodeResolver.resolvePostcode(sscsCaseData.getAppeal());
 
-        log.info("  Attempting to retrieve case management location");
+        log.info("  Attempting to retrieve case management location for case: {}", sscsCaseData.getCaseReference());
+
         Optional<CaseManagementLocation>
             locationOptional = caseManagementLocationService.retrieveCaseManagementLocation(processingVenueName, postcode);
 
@@ -43,7 +45,7 @@ public class LocationDataMigration implements DataMigrationStep {
             log.info("  Case management location fields for case {} set: Region: {}, Base location: {}.",
                 sscsCaseData.getCaseReference(), location.getRegion(), location.getBaseLocation());
         } else {
-            log.error("  Unable to resolve case management location for case: {}", sscsCaseData.getCaseReference());
+            throw new MigrationException("Unable to resolve case management location for case: " + sscsCaseData.getCaseReference());
         }
     }
 }

@@ -2,8 +2,7 @@ package uk.gov.hmcts.reform.sscs.migration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -15,9 +14,9 @@ import uk.gov.hmcts.reform.sscs.ccd.domain.Appeal;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Appellant;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Benefit;
 import uk.gov.hmcts.reform.sscs.ccd.domain.BenefitType;
-import uk.gov.hmcts.reform.sscs.ccd.domain.CaseAccessManagementFields;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Name;
 import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
+import uk.gov.hmcts.reform.sscs.exception.MigrationException;
 
 @ExtendWith(MockitoExtension.class)
 class CaseAccessManagementDataMigrationTest {
@@ -46,12 +45,7 @@ class CaseAccessManagementDataMigrationTest {
 
     @Test
     void testCategoriesForEmptyBenefitType(@Mock SscsCaseData caseDataMock) {
-        when(caseDataMock.getAppeal()).thenReturn(Appeal.builder().build());
-        when(caseDataMock.getCaseAccessManagementFields()).thenReturn(CaseAccessManagementFields.builder().build());
-        caseAccessManagementDataMigration.apply(caseDataMock);
-
-        assertNull(caseDataMock.getCaseAccessManagementFields().getCaseAccessCategory());
-        assertNull(caseDataMock.getCaseAccessManagementFields().getCaseManagementCategory());
+        assertThrows(MigrationException.class, () -> caseAccessManagementDataMigration.apply(caseDataMock));
     }
 
     @Test

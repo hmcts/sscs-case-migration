@@ -9,6 +9,7 @@ import uk.gov.hmcts.reform.sscs.ccd.domain.Appellant;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Benefit;
 import uk.gov.hmcts.reform.sscs.ccd.domain.Name;
 import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
+import uk.gov.hmcts.reform.sscs.exception.MigrationException;
 
 @Service
 @Slf4j
@@ -17,17 +18,25 @@ public class CaseAccessManagementDataMigration implements DataMigrationStep {
 
     @Override
     public void apply(SscsCaseData sscsCaseData) {
-        log.info("Applying case access management data migration steps for case: {} - Started ", sscsCaseData.getCaseReference());
+        log.info("Applying case access management data migration steps for case: {} - Started",
+            sscsCaseData.getCaseReference());
         addCaseCategories(sscsCaseData);
         addCaseNames(sscsCaseData);
         setOgdTypeToDwp(sscsCaseData);
-        log.info("Applying case access management data migration steps for case: {} - Completed", sscsCaseData.getCaseReference());
+        log.info("Applying case access management data migration steps for case: {} - Completed",
+            sscsCaseData.getCaseReference());
     }
 
     private void addCaseCategories(SscsCaseData sscsCaseData) {
         Optional<Benefit> benefit = sscsCaseData.getBenefitType();
-        benefit.ifPresent(value -> sscsCaseData.getCaseAccessManagementFields().setCategories(value));
-        log.info("  Case category set: {} ", sscsCaseData.getCaseAccessManagementFields().getCaseAccessCategory());
+        benefit.ifPresentOrElse(value -> sscsCaseData.getCaseAccessManagementFields().setCategories(value), () -> {
+            throw new MigrationException("Missing benefit type, unable to set case categories for case: "
+                + sscsCaseData.getCaseReference());
+        });
+
+        log.info("  Case category set: {} for case: {}",
+            sscsCaseData.getCaseAccessManagementFields().getCaseAccessCategory(),
+            sscsCaseData.getCaseReference());
 
     }
 
@@ -36,9 +45,12 @@ public class CaseAccessManagementDataMigration implements DataMigrationStep {
             .map(Appeal::getAppellant)
             .map(Appellant::getName)
             .map(Name::getFullNameNoTitle)
-            .ifPresent(name -> sscsCaseData.getCaseAccessManagementFields()
-                .setCaseNames(name));
-        log.info("  Case name set: {} ", sscsCaseData.getCaseAccessManagementFields().getCaseNameHmctsInternal());
+            .ifPresentOrElse(name -> sscsCaseData.getCaseAccessManagementFields().setCaseNames(name), () -> {
+                throw new MigrationException("Unable to set case names for case: " + sscsCaseData.getCaseReference());
+            });
+
+        log.info("  Case name set: {} for case: {}",
+            sscsCaseData.getCaseAccessManagementFields().getCaseNameHmctsInternal(), sscsCaseData.getCaseReference());
     }
 
     private void setOgdTypeToDwp(SscsCaseData sscsCaseData) {
