@@ -25,6 +25,10 @@
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         </encoder>
 
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <fileNamePattern>./logs/migration-results.%i.log</fileNamePattern>
         </rollingPolicy>
@@ -45,6 +49,10 @@
             <fileNamePattern>./logs/migration-errors.%i.log</fileNamePattern>
         </rollingPolicy>
 
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <maxFileSize>5MB</maxFileSize>
         </triggeringPolicy>
@@ -58,7 +66,7 @@
         <appender-ref ref="MIGRATION_FILE" />
     </logger>
 
-    <logger name="uk.gov.hmcts.reform.migration" level="ERROR">
+    <logger name="uk.gov.hmcts.reform.migration.CaseMigrationProcessor" level="ERROR">
         <appender-ref ref="MIGRATION_ERROR_FILE" />
     </logger>
 </included>

@@ -45,7 +45,8 @@ public class LocationDataMigration implements DataMigrationStep {
             log.info("  Case management location fields for case {} set: Region: {}, Base location: {}.",
                 sscsCaseData.getCaseReference(), location.getRegion(), location.getBaseLocation());
         } else {
-            throw new MigrationException("Unable to resolve case management location for case: " + sscsCaseData.getCaseReference());
+            throw new MigrationException("Unable to resolve case management location for case: "
+                + sscsCaseData.getCaseReference());
         }
     }
 }
