@@ -14,7 +14,7 @@
         </rollingPolicy>
 
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>5MB</maxFileSize>
+            <maxFileSize>2MB</maxFileSize>
         </triggeringPolicy>
     </appender>
 
@@ -30,7 +30,7 @@
         </rollingPolicy>
 
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>5MB</maxFileSize>
+            <maxFileSize>2MB</maxFileSize>
         </triggeringPolicy>
     </appender>
 
@@ -46,7 +46,7 @@
         </rollingPolicy>
 
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>5MB</maxFileSize>
+            <maxFileSize>2MB</maxFileSize>
         </triggeringPolicy>
     </appender>
 
@@ -54,11 +54,11 @@
         <appender-ref ref="SSCS_FILE" />
     </logger>
 
-    <logger name="uk.gov.hmcts.reform.migration" level="INFO">
+    <logger name="ccd-migration-info" level="INFO">
         <appender-ref ref="MIGRATION_FILE" />
     </logger>
 
-    <logger name="uk.gov.hmcts.reform.migration" level="ERROR">
+    <logger name="ccd-migration-error" level="ERROR">
         <appender-ref ref="MIGRATION_ERROR_FILE" />
     </logger>
 </included>
