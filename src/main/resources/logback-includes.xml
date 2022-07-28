@@ -14,7 +14,7 @@
         </rollingPolicy>
 
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>5MB</maxFileSize>
+            <maxFileSize>2MB</maxFileSize>
         </triggeringPolicy>
     </appender>
 
@@ -25,16 +25,12 @@
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         </encoder>
 
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>INFO</level>
-        </filter>
-
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <fileNamePattern>./logs/migration-results.%i.log</fileNamePattern>
         </rollingPolicy>
 
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>5MB</maxFileSize>
+            <maxFileSize>2MB</maxFileSize>
         </triggeringPolicy>
     </appender>
 
@@ -49,12 +45,8 @@
             <fileNamePattern>./logs/migration-errors.%i.log</fileNamePattern>
         </rollingPolicy>
 
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>ERROR</level>
-        </filter>
-
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <maxFileSize>5MB</maxFileSize>
+            <maxFileSize>2MB</maxFileSize>
         </triggeringPolicy>
     </appender>
 
@@ -62,11 +54,11 @@
         <appender-ref ref="SSCS_FILE" />
     </logger>
 
-    <logger name="uk.gov.hmcts.reform.migration" level="INFO">
+    <logger name="ccd-migration-info" level="INFO">
         <appender-ref ref="MIGRATION_FILE" />
     </logger>
 
-    <logger name="uk.gov.hmcts.reform.migration.CaseMigrationProcessor" level="ERROR">
+    <logger name="ccd-migration-error" level="ERROR">
         <appender-ref ref="MIGRATION_ERROR_FILE" />
     </logger>
 </included>
