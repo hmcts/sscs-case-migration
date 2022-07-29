@@ -21,18 +21,18 @@ public class LocationDataMigration implements DataMigrationStep {
     private final CaseManagementLocationService caseManagementLocationService;
 
     @Override
-    public void apply(SscsCaseData sscsCaseData) {
-        log.info("Applying location data migration steps for case: {} - Started", sscsCaseData.getCaseReference());
-        addCaseManagementLocation(sscsCaseData);
-        log.info("Applying location data migration steps for case: {} - Completed", sscsCaseData.getCaseReference());
+    public void apply(SscsCaseData sscsCaseData, Long id) {
+        log.info("Applying location data migration steps for case: {} - Started", id);
+        addCaseManagementLocation(sscsCaseData, id);
+        log.info("Applying location data migration steps for case: {} - Completed", id);
     }
 
-    private void addCaseManagementLocation(SscsCaseData sscsCaseData) {
+    private void addCaseManagementLocation(SscsCaseData sscsCaseData, Long id) {
         String processingVenueName = sscsCaseData.getProcessingVenue();
 
         String postcode = postcodeResolver.resolvePostcode(sscsCaseData.getAppeal());
 
-        log.info("  Attempting to retrieve case management location for case: {}", sscsCaseData.getCaseReference());
+        log.info("  Attempting to retrieve case management location for case: {}", id);
 
         Optional<CaseManagementLocation>
             locationOptional = caseManagementLocationService.retrieveCaseManagementLocation(processingVenueName, postcode);
@@ -43,10 +43,9 @@ public class LocationDataMigration implements DataMigrationStep {
             sscsCaseData.setCaseManagementLocation(location);
 
             log.info("  Case management location fields for case {} set: Region: {}, Base location: {}.",
-                sscsCaseData.getCaseReference(), location.getRegion(), location.getBaseLocation());
+                id, location.getRegion(), location.getBaseLocation());
         } else {
-            throw new MigrationException("Unable to resolve case management location for case: "
-                + sscsCaseData.getCaseReference());
+            throw new MigrationException("Unable to resolve case management location.");
         }
     }
 }
