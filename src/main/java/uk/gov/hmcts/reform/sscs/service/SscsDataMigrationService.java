@@ -30,12 +30,12 @@ public class SscsDataMigrationService implements DataMigrationService<SscsCaseDa
     }
 
     @Override
-    public SscsCaseData migrate(Map<String, Object> data) {
+    public SscsCaseData migrate(Map<String, Object> data, Long id) {
         SscsCaseData sscsCaseData = sscsCcdConvertService.getCaseData(data);
 
         if (dataMigrationSteps != null && !dataMigrationSteps.isEmpty()) {
             dataMigrationSteps
-                .forEach(s -> s.apply(sscsCaseData));
+                .forEach(s -> s.apply(sscsCaseData, id));
         }
 
         return sscsCaseData;

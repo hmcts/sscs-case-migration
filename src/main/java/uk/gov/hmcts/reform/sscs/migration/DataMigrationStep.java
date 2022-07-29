@@ -4,5 +4,5 @@ import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
 
 public interface DataMigrationStep {
 
-    void apply(SscsCaseData sscsCaseData);
+    void apply(SscsCaseData sscsCaseData, Long id);
 }

@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.sscs.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,6 +23,8 @@ import uk.gov.hmcts.reform.sscs.migration.CaseAccessManagementDataMigration;
 import uk.gov.hmcts.reform.sscs.migration.LocationDataMigration;
 
 class SscsDataMigrationServiceTest {
+
+    private static final long CASE_ID = 1L;
 
     @Mock
     private CaseAccessManagementDataMigration caseAccessManagementDataMigration;
@@ -51,10 +54,10 @@ class SscsDataMigrationServiceTest {
 
     @Test
     void testExecutionOfMigrationSteps() {
-        sscsDataMigrationService.migrate(Map.of());
+        sscsDataMigrationService.migrate(Map.of(), CASE_ID);
 
-        verify(caseAccessManagementDataMigration).apply(capture.capture());
-        verify(locationDataMigration).apply(capture.capture());
+        verify(caseAccessManagementDataMigration).apply(capture.capture(), anyLong());
+        verify(locationDataMigration).apply(capture.capture(), anyLong());
 
         assertEquals(2, capture.getAllValues().size());
         assertEquals("id_1", capture.getAllValues().get(0).getCcdCaseId());

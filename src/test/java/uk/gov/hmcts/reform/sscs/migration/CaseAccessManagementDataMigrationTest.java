@@ -21,6 +21,7 @@ import uk.gov.hmcts.reform.sscs.exception.MigrationException;
 @ExtendWith(MockitoExtension.class)
 class CaseAccessManagementDataMigrationTest {
 
+    private static final long CASE_ID = 1L;
     private CaseAccessManagementDataMigration caseAccessManagementDataMigration;
     private SscsCaseData caseData;
 
@@ -45,12 +46,12 @@ class CaseAccessManagementDataMigrationTest {
 
     @Test
     void testCategoriesForEmptyBenefitType(@Mock SscsCaseData caseDataMock) {
-        assertThrows(MigrationException.class, () -> caseAccessManagementDataMigration.apply(caseDataMock));
+        assertThrows(MigrationException.class, () -> caseAccessManagementDataMigration.apply(caseDataMock, CASE_ID));
     }
 
     @Test
     void testCategoriesForGivenBenefitType() {
-        caseAccessManagementDataMigration.apply(caseData);
+        caseAccessManagementDataMigration.apply(caseData, CASE_ID);
 
         assertNotNull(caseData.getCaseAccessManagementFields());
         assertEquals("personalIndependencePayment", caseData.getCaseAccessManagementFields().getCaseAccessCategory());
@@ -60,7 +61,7 @@ class CaseAccessManagementDataMigrationTest {
 
     @Test
     void testCaseNameAppellant() {
-        caseAccessManagementDataMigration.apply(caseData);
+        caseAccessManagementDataMigration.apply(caseData, CASE_ID);
 
         assertEquals("First Last", caseData.getCaseAccessManagementFields().getCaseNameHmctsInternal());
         assertEquals("First Last", caseData.getCaseAccessManagementFields().getCaseNameHmctsRestricted());
@@ -69,7 +70,7 @@ class CaseAccessManagementDataMigrationTest {
 
     @Test
     void testOgdType() {
-        caseAccessManagementDataMigration.apply(caseData);
+        caseAccessManagementDataMigration.apply(caseData, CASE_ID);
 
         assertEquals("DWP", caseData.getCaseAccessManagementFields().getOgdType());
     }

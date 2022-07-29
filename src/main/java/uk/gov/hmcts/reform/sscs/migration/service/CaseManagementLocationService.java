@@ -37,9 +37,12 @@ public class CaseManagementLocationService {
                     .region(courtVenue.getRegionId())
                     .build());
             } else {
-                log.error("  Unable to resolve required case management location details: court venue: {}, regional processing centre: {}",
+                log.error("  Unable to resolve court venue or RPC details: court venue: {}, regional processing centre: {}",
                     courtVenue, regionalProcessingCenter);
             }
+        } else {
+            log.error("  Unable to resolve case management location due to missing details. "
+                + "Processing venue: {}, postcode: {}", processingVenue, postcode);
         }
         return Optional.empty();
     }

@@ -22,6 +22,8 @@ import uk.gov.hmcts.reform.sscs.migration.service.CaseManagementLocationService;
 @ExtendWith(MockitoExtension.class)
 class LocationDataMigrationTest {
 
+    private static final long CASE_ID = 1L;
+
     @Mock
     private PostcodeResolver postcodeResolver;
 
@@ -44,7 +46,7 @@ class LocationDataMigrationTest {
             "postcode"))
             .thenReturn(Optional.of(CaseManagementLocation.builder().baseLocation("rpcEpimsId").region("regionId").build()));
 
-        locationDataMigration.apply(caseData);
+        locationDataMigration.apply(caseData, CASE_ID);
 
         assertNotNull(caseData.getCaseManagementLocation());
         assertThat(caseData.getCaseManagementLocation().getBaseLocation()).isEqualTo("rpcEpimsId");
@@ -63,6 +65,6 @@ class LocationDataMigrationTest {
             "postcode"))
             .thenReturn(Optional.empty());
 
-        assertThrows(MigrationException.class, () -> locationDataMigration.apply(caseData));
+        assertThrows(MigrationException.class, () -> locationDataMigration.apply(caseData, CASE_ID));
     }
 }

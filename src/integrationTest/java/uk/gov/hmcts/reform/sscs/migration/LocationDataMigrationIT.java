@@ -14,7 +14,7 @@ public class LocationDataMigrationIT extends SscsDataMigrationServiceIT {
 
     @Test
     public void verifyServiceCall() {
-        locationDataMigration.apply(sscsCaseData);
+        locationDataMigration.apply(sscsCaseData, 1L);
         assertNotNull(sscsCaseData.getCaseManagementLocation());
         assertEquals("8888", sscsCaseData.getCaseManagementLocation().getBaseLocation());
         assertEquals("10", sscsCaseData.getCaseManagementLocation().getRegion());
