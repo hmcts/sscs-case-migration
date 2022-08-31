@@ -28,14 +28,12 @@ public class LocationDataMigration implements DataMigrationStep {
     }
 
     private void addCaseManagementLocation(SscsCaseData sscsCaseData, Long id) {
-        String processingVenueName = sscsCaseData.getProcessingVenue();
-
         String postcode = postcodeResolver.resolvePostcode(sscsCaseData.getAppeal());
 
         log.info("  Attempting to retrieve case management location for case: {}", id);
 
         Optional<CaseManagementLocation>
-            locationOptional = caseManagementLocationService.retrieveCaseManagementLocation(processingVenueName, postcode);
+            locationOptional = caseManagementLocationService.retrieveCaseManagementLocation(postcode, sscsCaseData, id);
 
         if (locationOptional.isPresent()) {
             CaseManagementLocation location = locationOptional.get();
@@ -45,7 +43,7 @@ public class LocationDataMigration implements DataMigrationStep {
             log.info("  Case management location fields for case {} set: Region: {}, Base location: {}.",
                 id, location.getRegion(), location.getBaseLocation());
         } else {
-            throw new MigrationException("Unable to resolve case management location.");
+            throw new MigrationException("Unable to resolve case management location for case: " + id);
         }
     }
 }

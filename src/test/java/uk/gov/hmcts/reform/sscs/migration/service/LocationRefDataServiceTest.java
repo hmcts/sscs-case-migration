@@ -55,7 +55,7 @@ class LocationRefDataServiceTest {
             .serviceAuthorization(serviceAuth)
             .build());
 
-        when(refDataApi.courtVenueByName(idamToken, serviceAuth, SSCS_COURT_TYPE_ID)).thenReturn(List.of(
+        when(refDataApi.courtVenues(idamToken, serviceAuth, SSCS_COURT_TYPE_ID)).thenReturn(List.of(
             venue));
         List<CourtVenue> result =  locationRefDataService.retrieveCourtVenues();
 

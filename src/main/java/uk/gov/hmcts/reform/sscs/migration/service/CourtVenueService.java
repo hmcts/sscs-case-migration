@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.sscs.migration.service;
 
-import com.google.common.collect.Maps;
+import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -12,17 +12,17 @@ import uk.gov.hmcts.reform.sscs.model.CourtVenue;
 public class CourtVenueService {
 
     private final LocationRefDataService locationRefDataService;
-    private final Map<String, CourtVenue> courtVenuesByVenueName = Maps.newHashMap();
+    private final Map<String, CourtVenue> courtVenuesByEpimsId = new HashMap<>();
 
     @PostConstruct
     protected void init() {
         locationRefDataService.retrieveCourtVenues()
-            .forEach(courtVenue -> courtVenuesByVenueName.put(
-                courtVenue.getVenueName(),
+            .forEach(courtVenue -> courtVenuesByEpimsId.put(
+                courtVenue.getEpimsId(),
                 courtVenue));
     }
 
-    public CourtVenue lookupCourtVenueByName(String venueName) {
-        return courtVenuesByVenueName.get(venueName);
+    public CourtVenue lookupCourtVenueByEpimsId(String epimsId) {
+        return courtVenuesByEpimsId.get(epimsId);
     }
 }

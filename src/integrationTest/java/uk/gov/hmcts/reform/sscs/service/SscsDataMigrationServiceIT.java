@@ -106,7 +106,7 @@ public class SscsDataMigrationServiceIT {
         @Primary
         public CourtVenueService mockCourtVenueServiceService() {
             CourtVenueService mockCourtVenueService = mock(CourtVenueService.class);
-            when(mockCourtVenueService.lookupCourtVenueByName(any(String.class)))
+            when(mockCourtVenueService.lookupCourtVenueByEpimsId(any(String.class)))
                 .thenReturn(CourtVenue.builder().region("Somewhere").regionId("10").build());
             return mockCourtVenueService;
         }
