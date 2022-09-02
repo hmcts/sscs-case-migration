@@ -30,7 +30,10 @@ public class LocationRefDataService {
             throw new IllegalStateException("Unable to retrieve IdamTokens");
         }
 
-        List<CourtVenue> courtVenues = refDataApi.courtVenueByName(
+        log.info(idamTokens.getIdamOauth2Token());
+        log.info(idamTokens.getServiceAuthorization());
+
+        List<CourtVenue> courtVenues = refDataApi.courtVenues(
             idamTokens.getIdamOauth2Token(),
             idamTokens.getServiceAuthorization(),
             SSCS_COURT_TYPE_ID);

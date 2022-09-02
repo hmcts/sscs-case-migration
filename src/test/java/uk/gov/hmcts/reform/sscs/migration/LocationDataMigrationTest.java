@@ -42,8 +42,7 @@ class LocationDataMigrationTest {
             .build();
 
         when(postcodeResolver.resolvePostcode(Appeal.builder().build())).thenReturn("postcode");
-        when(caseManagementLocationService.retrieveCaseManagementLocation("Bradford",
-            "postcode"))
+        when(caseManagementLocationService.retrieveCaseManagementLocation("postcode", caseData, CASE_ID))
             .thenReturn(Optional.of(CaseManagementLocation.builder().baseLocation("rpcEpimsId").region("regionId").build()));
 
         locationDataMigration.apply(caseData, CASE_ID);
@@ -61,8 +60,7 @@ class LocationDataMigrationTest {
             .build();
 
         when(postcodeResolver.resolvePostcode(Appeal.builder().build())).thenReturn("postcode");
-        when(caseManagementLocationService.retrieveCaseManagementLocation("Bradford",
-            "postcode"))
+        when(caseManagementLocationService.retrieveCaseManagementLocation("postcode", caseData, CASE_ID))
             .thenReturn(Optional.empty());
 
         assertThrows(MigrationException.class, () -> locationDataMigration.apply(caseData, CASE_ID));

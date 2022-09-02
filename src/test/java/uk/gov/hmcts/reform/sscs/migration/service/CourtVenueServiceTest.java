@@ -15,6 +15,9 @@ import uk.gov.hmcts.reform.sscs.model.CourtVenue;
 @ExtendWith(MockitoExtension.class)
 class CourtVenueServiceTest {
 
+    public static final String EPIMS_ID = "1234";
+    public static final String BRADFORD = "Bradford";
+    public static final String BRADFORD_REGION_ID = "bradford-regionId";
     @Mock
     private LocationRefDataService locationRefDataService;
 
@@ -24,23 +27,24 @@ class CourtVenueServiceTest {
     @BeforeEach
     void setup() {
         when(locationRefDataService.retrieveCourtVenues()).thenReturn(List.of(CourtVenue.builder()
-                .venueName("Bradford")
-                .regionId("bradford-regionId")
+                .venueName(BRADFORD)
+                .epimsId(EPIMS_ID)
+                .regionId(BRADFORD_REGION_ID)
             .build()));
         courtVenueService.init();
     }
 
     @Test
     void shouldReturnCourtVenue_givenVenueIsPresent() {
-        CourtVenue courtVenue = courtVenueService.lookupCourtVenueByName("Bradford");
+        CourtVenue courtVenue = courtVenueService.lookupCourtVenueByEpimsId(EPIMS_ID);
 
         assertThat(courtVenue).isNotNull();
-        assertThat(courtVenue.getRegionId()).isEqualTo("bradford-regionId");
+        assertThat(courtVenue.getRegionId()).isEqualTo(BRADFORD_REGION_ID);
     }
 
     @Test
     void shouldReturnNull_givenVenueIsMissing() {
-        CourtVenue courtVenue = courtVenueService.lookupCourtVenueByName("Liverpool");
+        CourtVenue courtVenue = courtVenueService.lookupCourtVenueByEpimsId("4678392");
 
         assertThat(courtVenue).isNull();
     }
