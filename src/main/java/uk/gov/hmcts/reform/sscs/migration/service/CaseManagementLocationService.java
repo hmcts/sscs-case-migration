@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
 import uk.gov.hmcts.reform.sscs.ccd.domain.RegionalProcessingCenter;
 import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
+import uk.gov.hmcts.reform.sscs.exception.MigrationException;
 import uk.gov.hmcts.reform.sscs.model.CourtVenue;
 import uk.gov.hmcts.reform.sscs.service.AirLookupService;
 import uk.gov.hmcts.reform.sscs.service.RegionalProcessingCenterService;
@@ -32,16 +33,15 @@ public class CaseManagementLocationService {
     public Optional<CaseManagementLocation> retrieveCaseManagementLocation(String postcode, SscsCaseData sscsCaseData,
                                                                            Long id) {
         if (isBlank(postcode)) {
-            log.error("  Unable to resolve case management location due to missing postcode for case: " + id);
-            return Optional.empty();
+            throw new MigrationException("Unable to resolve case management location due to missing postcode for case: " + id);
         }
 
         String processingVenue = airLookupService.lookupAirVenueNameByPostCode(postcode, sscsCaseData.getAppeal()
             .getBenefitType());
 
         if (processingVenue == null) {
-            log.error("  Unable to resolve processing venue for postcode: {}, case: {}.", postcode, id);
-            return Optional.empty();
+            throw new MigrationException(String.format("Unable to resolve processing venue for postcode: %s, case: %d.",
+                postcode, id));
         }
 
         String venueEpimsId = venueService.getEpimsIdForVenue(processingVenue);
@@ -57,10 +57,9 @@ public class CaseManagementLocationService {
                 .region(courtVenue.getRegionId())
                 .build());
         } else {
-            log.error("  Unable to resolve court venue or RPC details for case: {}: court venue: {}, regional processing centre: {}",
+            String error = String.format("Unable to resolve court venue or RPC details for case: %s: court venue: %s, regional processing centre: %s",
                 id, courtVenue, regionalProcessingCenter);
-
-            return Optional.empty();
+            throw new MigrationException(error);
         }
     }
 
