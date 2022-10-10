@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.sscs.migration.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -17,6 +18,7 @@ import uk.gov.hmcts.reform.sscs.ccd.domain.BenefitType;
 import uk.gov.hmcts.reform.sscs.ccd.domain.CaseManagementLocation;
 import uk.gov.hmcts.reform.sscs.ccd.domain.RegionalProcessingCenter;
 import uk.gov.hmcts.reform.sscs.ccd.domain.SscsCaseData;
+import uk.gov.hmcts.reform.sscs.exception.MigrationException;
 import uk.gov.hmcts.reform.sscs.model.CourtVenue;
 import uk.gov.hmcts.reform.sscs.service.AirLookupService;
 import uk.gov.hmcts.reform.sscs.service.RegionalProcessingCenterService;
@@ -53,28 +55,22 @@ class CaseManagementLocationServiceTest {
 
     @Test
     void shouldNotRetrieveCaseManagementLocation_givenBlankPostcode() {
-        Optional<CaseManagementLocation> caseManagementLocation =
-            caseManagementLocationService.retrieveCaseManagementLocation("TS1 1ST", caseData, CASE_ID);
-
-        assertThat(caseManagementLocation).isEmpty();
+        assertThrows(MigrationException.class, () -> caseManagementLocationService.retrieveCaseManagementLocation(
+            "TS1 1ST", caseData, CASE_ID));
     }
 
     @Test
     void shouldNotRetrieveCaseManagementLocation_givenNoProcessingVenue() {
-        Optional<CaseManagementLocation> caseManagementLocation =
-            caseManagementLocationService.retrieveCaseManagementLocation(BRADFORD_POSTCODE, caseData, CASE_ID);
-
-        assertThat(caseManagementLocation).isEmpty();
+        assertThrows(MigrationException.class, () -> caseManagementLocationService.retrieveCaseManagementLocation(
+            BRADFORD_POSTCODE, caseData, CASE_ID));
     }
 
     @Test
     void shouldNotRetrieveCaseManagementLocation_givenNullRpc() {
         when(airLookupService.lookupAirVenueNameByPostCode(anyString(), any(BenefitType.class))).thenReturn(BRADFORD);
 
-        Optional<CaseManagementLocation> caseManagementLocation =
-            caseManagementLocationService.retrieveCaseManagementLocation(BRADFORD_POSTCODE, caseData, CASE_ID);
-
-        assertThat(caseManagementLocation).isEmpty();
+        assertThrows(MigrationException.class, () -> caseManagementLocationService.retrieveCaseManagementLocation(
+            BRADFORD_POSTCODE, caseData, CASE_ID));
     }
 
     @Test
@@ -83,11 +79,8 @@ class CaseManagementLocationServiceTest {
         when(venueService.getEpimsIdForVenue(BRADFORD)).thenReturn(VENUE_EPIMS_ID);
         when(courtVenueService.lookupCourtVenueByEpimsId(VENUE_EPIMS_ID)).thenReturn(CourtVenue.builder().build());
 
-        RegionalProcessingCenter rpc = RegionalProcessingCenter.builder().build();
-        Optional<CaseManagementLocation> caseManagementLocation =
-            caseManagementLocationService.retrieveCaseManagementLocation(BRADFORD_POSTCODE, caseData, CASE_ID);
-
-        assertThat(caseManagementLocation).isEmpty();
+        assertThrows(MigrationException.class, () -> caseManagementLocationService.retrieveCaseManagementLocation(
+            BRADFORD_POSTCODE, caseData, CASE_ID));
     }
 
     @Test
@@ -96,10 +89,8 @@ class CaseManagementLocationServiceTest {
         when(venueService.getEpimsIdForVenue(BRADFORD)).thenReturn(VENUE_EPIMS_ID);
         when(courtVenueService.lookupCourtVenueByEpimsId(VENUE_EPIMS_ID)).thenReturn(CourtVenue.builder().regionId("regionId").build());
 
-        Optional<CaseManagementLocation> caseManagementLocation =
-            caseManagementLocationService.retrieveCaseManagementLocation(BRADFORD_POSTCODE, caseData, CASE_ID);
-
-        assertThat(caseManagementLocation).isEmpty();
+        assertThrows(MigrationException.class, () -> caseManagementLocationService.retrieveCaseManagementLocation(
+            BRADFORD_POSTCODE, caseData, CASE_ID));
     }
 
     @Test
