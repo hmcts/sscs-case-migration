@@ -168,7 +168,7 @@ dependencyManagement {
     }
 
 
-    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.13.3') {
+    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.13.4.2') {
       entry 'jackson-databind'
     }
 
