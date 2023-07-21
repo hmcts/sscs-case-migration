@@ -3,8 +3,8 @@ plugins {
   id 'checkstyle'
   id 'pmd'
   id 'jacoco'
-  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-  id 'org.springframework.boot' version '2.6.2'
+  id 'io.spring.dependency-management' version '1.1.2'
+  id 'org.springframework.boot' version '2.7.14'
   id 'org.owasp.dependencycheck' version '7.1.1'
   id 'com.github.ben-manes.versions' version '0.41.0'
   id 'org.sonarqube' version '3.3'
@@ -137,12 +137,12 @@ ext {
 }
 
 ext {
-  springCloudVersion = '2021.0.0'
+  springCloudVersion = '2021.0.8'
 }
 
 dependencyManagement {
   dependencies {
-    dependencySet(group: 'org.springframework', version: '5.3.22') {
+    dependencySet(group: 'org.springframework', version: '5.3.29') {
       entry 'spring-aop'
       entry 'spring-aspects'
       entry 'spring-beans'
@@ -160,7 +160,7 @@ dependencyManagement {
       entry 'spring-messaging'
     }
 
-    dependencySet(group: 'org.springframework.security', version: '5.7.2') {
+    dependencySet(group: 'org.springframework.security', version: '5.8.5') {
       entry 'spring-security-crypto'
       entry 'spring-security-config'
       entry 'spring-security-core'
