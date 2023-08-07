@@ -191,8 +191,8 @@ dependencies {
   implementation 'com.github.hmcts:sscs-common:4.18.0'
   implementation 'com.github.hmcts:idam-java-client:2.0.1'
 
-  annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
-  compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
+  annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.28'
+  compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.28'
 
   implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: reformLoggingVersion
   implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: reformLoggingVersion
