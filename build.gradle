@@ -4,7 +4,7 @@ plugins {
   id 'pmd'
   id 'jacoco'
   id 'io.spring.dependency-management' version '1.1.2'
-  id 'org.springframework.boot' version '2.7.14'
+  id 'org.springframework.boot' version '3.3.5'
   id 'org.owasp.dependencycheck' version '7.1.1'
   id 'com.github.ben-manes.versions' version '0.41.0'
   id 'org.sonarqube' version '3.3'
@@ -137,12 +137,12 @@ ext {
 }
 
 ext {
-  springCloudVersion = '2021.0.8'
+  springCloudVersion = '2023.0.3'
 }
 
 dependencyManagement {
   dependencies {
-    dependencySet(group: 'org.springframework', version: '5.3.29') {
+    dependencySet(group: 'org.springframework', version: '6.1.14') {
       entry 'spring-aop'
       entry 'spring-aspects'
       entry 'spring-beans'
@@ -160,7 +160,7 @@ dependencyManagement {
       entry 'spring-messaging'
     }
 
-    dependencySet(group: 'org.springframework.security', version: '5.8.5') {
+    dependencySet(group: 'org.springframework.security', version: '6.3.4') {
       entry 'spring-security-crypto'
       entry 'spring-security-config'
       entry 'spring-security-core'
