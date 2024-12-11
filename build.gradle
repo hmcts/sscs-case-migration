@@ -61,7 +61,7 @@ checkstyle {
 pmd {
   toolVersion = "6.5.0"
   sourceSets = [sourceSets.main, sourceSets.test]
-  reportsDir = file("$project.buildDir/reports/pmd")
+  reportsDir = layout.buildDirectory.dir("reports/pmd").get().asFile
   ruleSetFiles = files("config/pmd/ruleset.xml")
 }
 
