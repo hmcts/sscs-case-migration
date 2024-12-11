@@ -211,7 +211,9 @@ dependencies {
   integrationTestImplementation sourceSets.test.runtimeClasspath
 }
 
-mainClassName = 'uk.gov.hmcts.reform.migration.CaseMigrationRunner'
+application {
+  mainClass.set('uk.gov.hmcts.reform.migration.CaseMigrationRunner')
+}
 
 bootJar {
   archiveFileName = "sscs-case-migration.jar"
