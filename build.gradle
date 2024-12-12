@@ -190,8 +190,6 @@ dependencies {
   implementation('org.springframework.cloud:spring-cloud-starter-bootstrap')
   implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
-  implementation 'com.github.hmcts.ccd-case-migration-starter:domain:3.0.0'
-  implementation 'uk.gov.hmcts.reform.ccd-case-migration:processor:DEV-SNAPSHOT'
   implementation 'com.github.hmcts:sscs-common:4.18.0'
   implementation 'com.github.hmcts:idam-java-client:2.0.1'
 
@@ -217,6 +215,8 @@ application {
 
 bootJar {
   archiveFileName = "sscs-case-migration.jar"
+  archiveBaseName = 'sscs-ccd-case-migration'
+  archiveVersion = project.version.toString()
 
   manifest {
     attributes('Implementation-Version': project.version.toString())
